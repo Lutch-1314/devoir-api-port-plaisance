@@ -12,14 +12,15 @@ const User = new Schema ({
     email: {
         type : String,
         trim : true,
-        required : [true, 'L email est requis'],
+        required : [true, 'L’email est requis'],
         unique: true,
         lowercase: true
     },
     password: {
         type : String,
         trim : true,
-        minlength: 8
+        minlength: 8,
+        match: [/\d/, 'Le mot de passe doit contenir au moins un chiffre']
     }
 }, {
     timestamps: true

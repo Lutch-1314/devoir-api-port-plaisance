@@ -3,12 +3,14 @@ const router = express.Router();
 
 const service = require('../services/users');
 
-router.put('/add', service.add);
+router.get('/', service.getAllUsers);
 
-router.get('/users', service.users);
+router.get('/:email', service.getByEmail);
 
-router.patch('/:id', service.update);
+router.post('/', service.add);
 
-router.delete('/:id', service.delete);
+router.put('/:email', service.update);
+
+router.delete('/:email', service.delete);
 
 module.exports = router;
