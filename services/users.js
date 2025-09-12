@@ -4,7 +4,7 @@ exports.getByEmail = async (req, res, next) => {
     const email = req.params.email
 
     try {
-        let user = await User.findByEmail(email);
+        let user = await User.findOne({ email : email });
 
         if (user) {
             return res.status(200).json(user);
@@ -51,7 +51,7 @@ exports.update = async (req, res, next) => {
     });
 
     try {
-        let user = await User.findOne({ email : email});
+        let user = await User.findOne({ email : email });
 
         if (user) {
             Object.keys(temp).forEach((key) => {
@@ -76,7 +76,7 @@ exports.delete = async (req, res, next) => {
     try {
         await User.deleteOne({ email: email });
 
-        return res.status(204).json('delete_ok');
+        return res.sendStatus(204);
     } catch (error) {
         return res.status(501).json(error);
     }
