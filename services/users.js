@@ -122,3 +122,16 @@ exports.login = async (req, res, next) => {
         return res.status(501).json(error);
     }
 }
+
+exports.logout = async (req, res, next) => {
+    try {
+        // Comme on ne peut pas invalider un JWT côté serveur,
+        // on dit juste au client de le supprimer.
+        return res.status(200).json({
+            message: 'logout_succeed',
+            info: 'Supprimez le token côté client pour finaliser la déconnexion'
+        });
+    } catch (error) {
+        return res.status(500).json(error);
+    }
+};
