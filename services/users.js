@@ -15,7 +15,7 @@ exports.getByEmail = async (req, res, next) => {
 
         return res.status(404).json('user_not_found');
     } catch (error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
@@ -41,7 +41,7 @@ exports.add = async (req, res, next) => {
 
         return res.status(201).json(user);
     } catch (error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
@@ -69,7 +69,7 @@ exports.update = async (req, res, next) => {
 
         return res.status(404).json('user_not_found');
     } catch (error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
@@ -81,7 +81,7 @@ exports.delete = async (req, res, next) => {
 
         return res.sendStatus(204);
     } catch (error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
@@ -119,7 +119,7 @@ exports.login = async (req, res, next) => {
             return res.status(404).json('user_not_found');
         }
     } catch (error) {
-        return res.status(501).json(error);
+        return res.status(500).json(error);
     }
 }
 
