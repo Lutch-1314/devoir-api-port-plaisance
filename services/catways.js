@@ -1,7 +1,4 @@
 const Catway = require('../models/catway');
-const bcrypt = require('bcrypt');
-const jwt = require('jsonwebtoken');
-const SECRET_KEY = process.env.SECRET_KEY;
 
 exports.getById = async (req, res, next) => {
     const id = req.params.id
@@ -56,6 +53,11 @@ exports.update = async (req, res, next) => {
             return res.status(404).json('catway_not_found');
         }
 
+        // empêcher toute tentative de modification du numéro ou du type
+        if (catwayNumber || catwayType) {
+            return res.status(400).json({ message: "Seule la description de l'état peut être modifiée" });
+        }
+        
         if (catwayState) {
             catway.catwayState = catwayState;
         }

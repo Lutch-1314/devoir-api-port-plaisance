@@ -3,8 +3,8 @@ const router = express.Router();
 const service = require('../services/catways');
 const private = require('../middlewares/private');
 
-router.get('/', service.getAllCatways);
-router.post('/', service.add);
+router.get('/', private.checkJWT, service.getAllCatways);
+router.post('/', private.checkJWT, service.add);
 
 router.get('/:id', private.checkJWT, service.getById);
 router.put('/:id', private.checkJWT, service.update);
