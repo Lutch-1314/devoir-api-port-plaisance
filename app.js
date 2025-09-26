@@ -46,4 +46,7 @@ app.use((err, req, res, next) => {
   });
 });
 
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views')); // dossier des vues
+
 module.exports = app;
