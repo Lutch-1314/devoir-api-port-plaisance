@@ -7,15 +7,15 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 
 const indexRouter = require('./routes/index');
-const usersRouter = require('./routes/users');
-const catwaysRouter = require('./routes/catways');
-const reservationRouter = require('./routes/reservations');
 
 const app = express();
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log(`✅ Connecté à MongoDB : ${process.env.MONGO_URI}`))
   .catch(err => console.error('❌ Erreur de connexion MongoDB :', err));
+
+app.set('view engine', 'ejs');
+app.set('views', path.join(__dirname, 'views'));
 
 app.use(cors({
     exposedHeaders: ['Authorization'],
@@ -28,9 +28,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-app.use('/catways', catwaysRouter);
-app.use('/catways/:id/reservations', reservationRouter);
 
 // catch 404 and forward to error handler
 app.use((req, res, next) => {
@@ -45,8 +42,5 @@ app.use((err, req, res, next) => {
     error: req.app.get('env') === 'development' ? err : {}
   });
 });
-
-app.set('view engine', 'ejs');
-app.set('views', path.join(__dirname, 'views')); // dossier des vues
 
 module.exports = app;

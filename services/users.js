@@ -89,39 +89,33 @@ exports.login = async (req, res, next) => {
     const { email, password } = req.body;
 
     try {
-        let user = await User.findOne({ email: email }, '-_v -createdAt -updatedAt');
+        let user = await User.findOne({ email: email });
 
-        if (user) {
-            bcrypt.compare(password, user.password, function(err, response) {
-                if (err) {
-                    throw new Error(err);
-                }
-                if (response) {
-                    delete user._doc.password;
+        if (!user) return res.status(404).json('Utilisateur non trouvé');
 
-                    const expireIn = 24 * 60 * 60;
-                    const token = jwt.sign({
-                        user: user
-                    },
-                    SECRET_KEY,
-                    {
-                        expiresIn: expireIn
-                    });
+        bcrypt.compare(password, user.password, function(err, response) {
+            if (err) return next(err);
 
-                    res.header('Authorization', 'Bearer' + token);
+            if (!response) return res.status(403).json('Mot de passe incorrect');
 
-                    return res.status(200).json('authenticate_succeed');
-                }
+            // On ne met que les infos utiles dans le JWT
+            const payload = {
+                username: user.username,
+                email: user.email
+            };
 
-                return res.status(403).json('wrong_credentials');
-            });
-        } else {
-            return res.status(404).json('user_not_found');
-        }
+            const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '24h' });
+
+            // Stockage dans un cookie pour les vues
+            res.cookie('token', token, { httpOnly: true, maxAge: 24*60*60*1000 });
+
+            // Redirection vers le dashboard
+            return res.redirect('/dashboard');
+        });
     } catch (error) {
         return res.status(500).json(error);
     }
-}
+};
 
 exports.logout = async (req, res, next) => {
     try {

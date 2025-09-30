@@ -1,9 +1,8 @@
 const express = require('express');
 const router = express.Router();
 
-const service = require('../services/users');
-
-const private = require('../middlewares/private');
+const service = require('../../services/users');
+const private = require('../../middlewares/private');
 
 // Route pour se connecter
 router.post('/login', service.login);

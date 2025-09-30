@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const service = require('../services/catways');
-const private = require('../middlewares/private');
+const service = require('../../services/catways');
+const private = require('../../middlewares/private');
 
 router.get('/', private.checkJWT, service.getAllCatways);
 router.post('/', private.checkJWT, service.add);

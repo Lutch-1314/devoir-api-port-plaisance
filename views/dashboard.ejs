@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Tableau de bord</title>
+    </head>
+    <body>
+        <header>
+            <h1>Tableau de bord</h1>
+            <nav>
+                <ul>
+                    <li><a href="/">🏠 Accueil</a></li>
+                    <li><a href="/catways">Gestion des catways</a></li>
+                    <li><a href="/reservations">Gestion des réservations</a></li>
+                    <li><a href="/users">Gestion des utilisateurs</a></li>
+                    <li><a href="/docs">Documentation API</a></li>
+                    <li><a href="/logout">Déconnexion</a></li>
+                </ul>
+            </nav>
+        </header>
+
+        <main>
+            <section>
+                <p>Bonjour <%= user.username %> (<%= user.email %>),</p>
+                <p>Nous sommes le <%= currentDate %>.</p>
+            </section>    
+            <section>    
+                <h2>Liste des réservations en cours :</h2>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Catway</th>
+                            <th>Client</th>
+                            <th>Bateau</th>
+                            <th>Début</th>
+                            <th>Fin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reservations.forEach(reservation => { %>
+                            <tr>
+                                <td><%= reservation.catwayNumber %></td>
+                                <td><%= reservation.clientName %></td>
+                                <td><%= reservation.boatName %></td>
+                                <td><%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %></td>
+                                <td><%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %></td>
+                            </tr>
+                        <% }); %>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+    </body>
+</html>
