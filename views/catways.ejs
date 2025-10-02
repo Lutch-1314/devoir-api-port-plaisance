@@ -4,6 +4,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Gestion des catways</title>
+        <link rel="stylesheet" href="/stylesheets/style.css">
     </head>
     <body>
         <header>
@@ -14,28 +15,66 @@
         </header>
         <main>
             <section>
-                <table>
+                <table class="editable-table">
+                    <caption>Liste des catways</caption>
                     <thead>
                         <tr>
                             <th>Numéro</th>
                             <th>Type</th>
                             <th>État</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         <% catways.forEach(catway => { %>
                             <tr>
                                 <td><%= catway.catwayNumber %></td>
-                                <td><%= catway.catwayType %></td>
-                                <td><%= catway.catwayState %></td>
+                                <td><%= catway.catwayType === 'short' ? 'Court' : 'Long' %></td>
+                                <td class="state-cell">
+                                    <span class="state-text"><%= catway.catwayState %></span>
+                                    <form action="/catways/update/<%= catway._id %>" method="POST" class="state-form hidden">
+                                        <input type="text" name="catwayState" value="<%= catway.catwayState %>" required>
+                                        <button type="submit">Sauvegarder</button>
+                                        <button type="button" class="cancel-btn">Annuler</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <button type="button" class="edit-btn">Modifier</button>
+                                    <form action="/catways/delete/<%= catway._id %>" method="POST" class="delete-form" style="display:inline">
+                                        <button type="button" class="delete-btn">Supprimer</button>
+                                    </form>
+                                </td>
                             </tr>
                         <% }); %>
                     </tbody>
                 </table>
             </section>
             <section>
-               
+                <button type="button" class="add-btn">Ajouter un nouveau catway</button>
+
+                <form action="/catways/add" method="POST" class="add-form hidden">
+                    <label for="catwayNumber">Numéro :</label>
+                    <input type="number" name="catwayNumber" id="catwayNumber" required min="1">
+
+                    <label for="catwayType">Type :</label>
+                    <select name="catwayType" id="catwayType" required>
+                        <option value="short">Court</option>
+                        <option value="long">Long</option>
+                    </select>
+
+                    <label for="catwayState">État :</label>
+                    <input type="text" name="catwayState" id="catwayState" required>
+
+                    <button type="submit">Ajouter</button>
+                    <button type="button" class="cancel-btn">Annuler</button>
+                </form>
+                <% if (error) { %>
+                    <p class="error-message"><%= error %></p>
+                <% } %>
             </section>
         </main>
+        <script type="module" src="/javascripts/edit-btn.js"></script>
+        <script type="module" src="/javascripts/delete-btn.js"></script>
+        <script type="module" src="/javascripts/add-catway.js"></script>
     </body>
 </html>

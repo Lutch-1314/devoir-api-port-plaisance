@@ -42,31 +42,31 @@ exports.add = async (req, res, next) => {
     }
 }
 
-exports.update = async (req, res, next) => {
-    const id = req.params.id;
-    const { catwayState } = req.body;
+exports.update = async (req, res) => {
+  const { id } = req.params;
+  const { catwayNumber, catwayType, catwayState } = req.body;
 
-    try {
-        let catway = await Catway.findOne({ catwayNumber: parseInt(id) });
+  try {
+    const catway = await Catway.findById(id);
 
-        if (!catway) {
-            return res.status(404).json('catway_not_found');
-        }
-
-        // empêcher toute tentative de modification du numéro ou du type
-        if (catwayNumber || catwayType) {
-            return res.status(400).json({ message: "Seule la description de l'état peut être modifiée" });
-        }
-        
-        if (catwayState) {
-            catway.catwayState = catwayState;
-        }
-
-        await catway.save();
-        return res.status(200).json(catway);
-    } catch (error) {
-        return res.status(500).json(error);
+    if (!catway) {
+      return res.status(404).json({ message: "Catway non trouvé" });
     }
+
+    if (catwayNumber || catwayType) {
+      return res.status(400).json({ message: "Seul l'état peut être modifié" });
+    }
+
+    if (catwayState) {
+      catway.catwayState = catwayState;
+      await catway.save();
+    }
+
+    return res.status(200).json(catway);
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({ message: "Erreur serveur", error });
+  }
 };
 
 exports.delete = async (req, res, next) => {
