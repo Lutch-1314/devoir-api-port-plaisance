@@ -32,17 +32,11 @@
                                 <td><%= catway.catwayType === 'short' ? 'Court' : 'Long' %></td>
                                 <td class="state-cell">
                                     <span class="state-text"><%= catway.catwayState %></span>
-                                    <form action="/catways/update/<%= catway._id %>" method="POST" class="state-form hidden">
-                                        <input type="text" name="catwayState" value="<%= catway.catwayState %>" required>
-                                        <button type="submit">Sauvegarder</button>
-                                        <button type="button" class="cancel-btn">Annuler</button>
-                                    </form>
+                                    <%- include('partials/edit-catway-form', { catway: catway }) %>
                                 </td>
                                 <td>
                                     <button type="button" class="edit-btn">Modifier</button>
-                                    <form action="/catways/delete/<%= catway._id %>" method="POST" class="delete-form" style="display:inline">
-                                        <button type="button" class="delete-btn">Supprimer</button>
-                                    </form>
+                                    <%- include('partials/delete-catway-form', { catway: catway }) %>
                                 </td>
                             </tr>
                         <% }); %>
@@ -51,23 +45,7 @@
             </section>
             <section>
                 <button type="button" class="add-btn">Ajouter un nouveau catway</button>
-
-                <form action="/catways/add" method="POST" class="add-form hidden">
-                    <label for="catwayNumber">Numéro :</label>
-                    <input type="number" name="catwayNumber" id="catwayNumber" required min="1">
-
-                    <label for="catwayType">Type :</label>
-                    <select name="catwayType" id="catwayType" required>
-                        <option value="short">Court</option>
-                        <option value="long">Long</option>
-                    </select>
-
-                    <label for="catwayState">État :</label>
-                    <input type="text" name="catwayState" id="catwayState" required>
-
-                    <button type="submit">Ajouter</button>
-                    <button type="button" class="cancel-btn">Annuler</button>
-                </form>
+                <%- include('partials/add-catway-form') %>
                 <% if (error) { %>
                     <p class="error-message"><%= error %></p>
                 <% } %>

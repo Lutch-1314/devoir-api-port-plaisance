@@ -1,0 +1,16 @@
+<form action="/catways/add" method="POST" class="add-form hidden">
+    <label for="catwayNumber">Numéro :</label>
+    <input type="number" name="catwayNumber" id="catwayNumber" required min="1">
+
+    <label for="catwayType">Type :</label>
+    <select name="catwayType" id="catwayType" required>
+        <option value="short">Court</option>
+        <option value="long">Long</option>
+    </select>
+
+    <label for="catwayState">État :</label>
+    <input type="text" name="catwayState" id="catwayState" required>
+
+    <button type="submit">Ajouter</button>
+    <button type="button" class="cancel-btn">Annuler</button>
+</form>

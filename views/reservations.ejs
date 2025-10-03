@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Gestion des réservations</title>
+        <link rel="stylesheet" href="/stylesheets/style.css">
+    </head>
+    <body>
+        <header>
+            <h1>Gestion des réservations</h1>
+            <nav>
+                <a href="/dashboard">💻 Retour au tableau de bord</a>
+            </nav>
+        </header>
+        <main>
+            <section>
+                <table class="editable-table">
+                    <caption>Liste des réservations</caption>
+                    <thead>
+                        <tr>
+                            <th>Numéro de catway</th>
+                            <th>Nom du client</th>
+                            <th>Nom du bateau</th>
+                            <th>Date de début</th>
+                            <th>Date de fin</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% reservations.forEach(reservation => { %>
+                            <tr>
+                                <td><%= reservation.catwayNumber %></td>
+                                <td><%= reservation.clientName %></td>
+                                <td><%= reservation.boatName %></td>
+                                <td><%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %></td>
+                                <td><%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %></td>
+                                <td><%- include('partials/delete-reservation-form', { reservation: reservation }) %></td>
+                            </tr>
+                        <% }) %>
+                    </tbody>
+                </table>
+            </section>
+        </main>
+        <script type="module" src="/javascripts/delete-reservation.js"></script>
+    </body>
+</html>
