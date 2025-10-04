@@ -1,0 +1,26 @@
+<form action="/reservations/add" method="POST" class="add-form hidden">
+    <label for="catwayNumber">Numéro de catway :</label>
+    <select name="catwayNumber" id="catwayNumber" required>
+        <option value="">-- Sélectionnez un catway --</option>
+        <% catways.forEach(catway => { %>
+            <option value="<%= catway.catwayNumber %>">
+                <%= catway.catwayNumber %>
+            </option>
+        <% }) %>
+    </select>
+
+    <label for="clientName">Nom du client :</label>
+    <input type="text" name="clientName" id="clientName" required>
+
+    <label for="boatName">Nom du bateau :</label>
+    <input type="text" name="boatName" id="boatName" required>
+
+    <label for="startDate">Date de début :</label>
+    <input type="date" name="startDate" id="startDate" required>
+
+    <label for="endDate">Date de fin :</label>
+    <input type="date" name="endDate" id="endDate" required>
+
+    <button type="submit">Ajouter</button>
+    <button type="button" class="cancel-btn">Annuler</button>
+</form>
