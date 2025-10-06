@@ -14,38 +14,63 @@
             </nav>
         </header>
         <main>
+            <% if (error) { %> 
+                <div class="error"><%= error %></div> 
+            <% } %>
             <section>
-                <table class="editable-table reservations">
-                    <caption>Liste des réservations</caption>
-                    <thead>
-                        <tr>
-                            <th>Numéro de catway</th>
-                            <th>Nom du client</th>
-                            <th>Nom du bateau</th>
-                            <th>Date de début</th>
-                            <th>Date de fin</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <% reservations.forEach(reservation => { %>
-                            <tr>
-                                <td><%= reservation.catwayNumber %></td>
-                                <td><%= reservation.clientName %></td>
-                                <td><%= reservation.boatName %></td>
-                                <td><%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %></td>
-                                <td><%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %></td>
-                                <td><%- include('partials/edit-reservation-form', { reservation: reservation }) %></td>
-                                <td><%- include('partials/delete-reservation-form', { reservation: reservation }) %></td>
-                            </tr>
-                        <% }) %>
-                    </tbody>
-                </table>
+                <h2>Réservations en cours</h2>
+
+                <% if (currentReservations.length === 0) { %>
+                    <p>Aucune réservation en cours.</p>
+                <% } else { %>
+                    <table class="editable-table reservations">
+                        <thead>
+                            <%- include('partials/reservations/reservation-table-header') %>
+                        </thead>
+                        <tbody>
+                            <% currentReservations.forEach(reservation => { %>
+                                <%- include('partials/reservations/reservation-row', { reservation: reservation, editable: true }) %>
+                            <% }); %> 
+                        </tbody>
+                    </table>
+                <% } %>
             </section>
+
             <section>
-                <button type="button" class="add-btn">Ajouter une nouvelle réservation</button>
-                <%- include('partials/add-reservation-form') %>
-                <% if (error) { %>
-                    <p class="error-message"><%= error %></p>
+                <h2>Réservations à venir</h2>
+
+                <% if (futureReservations.length===0) { %>
+                    <p>Aucune réservation à venir.</p>
+                    <% } else { %>
+                        <table class="editable-table reservations">
+                            <thead>
+                                <%- include('partials/reservations/reservation-table-header') %>
+                            </thead>
+                            <tbody>
+                                <% futureReservations.forEach(reservation=> { %>
+                                    <%- include('partials/reservations/reservation-row', { reservation: reservation, editable: true }) %>
+                                <% }); %>
+                            </tbody>
+                        </table>
+                    <% } %>
+            </section>
+
+            <section>
+                <h2>Réservations passées</h2>
+
+                <% if (pastReservations.length === 0) { %>
+                    <p>Aucune réservation passée.</p>
+                <% } else { %>
+                    <table class="editable-table reservations">
+                        <thead>
+                            <%- include('partials/reservations/reservation-table-header') %>                      
+                        </thead>
+                        <tbody>
+                            <% pastReservations.forEach(reservation => { %>
+                                <%- include('partials/reservations/reservation-row', { reservation: reservation, editable: false }) %>
+                            <% }); %>
+                        </tbody>
+                    </table>
                 <% } %>
             </section>
         </main>

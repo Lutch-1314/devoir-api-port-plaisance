@@ -9,8 +9,17 @@ router.get('/', checkJWT, async (req, res) => {
     const reservations = await Reservation.find().sort({ startDate: 1 });
     const catways = await Catway.find().sort({ catwayNumber: 1 });
 
+    const today = new Date();
+
+    // Séparer selon la date
+    const pastReservations = reservations.filter(r => new Date(r.endDate) < today);
+    const currentReservations = reservations.filter(r => new Date(r.startDate) <= today && new Date(r.endDate) >= today);
+    const futureReservations = reservations.filter(r => new Date(r.startDate) > today);
+
     res.render('reservations', {
-      reservations,
+      pastReservations,
+      currentReservations,
+      futureReservations,
       catways,
       user: req.user,
       error: null
@@ -18,13 +27,16 @@ router.get('/', checkJWT, async (req, res) => {
   } catch (err) {
     console.error('GET /reservations error:', err);
     res.render('reservations', {
-      reservations: [],
+      pastReservations: [],
+      currentReservations: [],
+      futureReservations: [],
       catways: [],
       user: req.user,
       error: "Impossible de charger les réservations"
     });
   }
 });
+
 
 router.post('/add', checkJWT, async (req, res) => {
   try {
@@ -116,92 +128,59 @@ router.post('/update/:id', checkJWT, async (req, res) => {
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    if (isNaN(catwayNumber)) {
-      const reservations = await Reservation.find().sort({ startDate: 1 });
-      const catways = await Catway.find().sort({ catwayNumber: 1 });
-      return res.render('reservations', {
-        reservations,
-        catways,
-        user: req.user,
-        error: 'Le numéro de catway doit être un entier valide'
-      });
+    // Vérifications de base
+    if (isNaN(catwayNumber) || isNaN(start.getTime()) || isNaN(end.getTime()) || end < start) {
+      throw new Error('Les données fournies sont invalides.');
     }
 
-    if (isNaN(start.getTime()) || isNaN(end.getTime())) {
-      const reservations = await Reservation.find().sort({ startDate: 1 });
-      const catways = await Catway.find().sort({ catwayNumber: 1 });
-      return res.render('reservations', {
-        reservations,
-        catways,
-        user: req.user,
-        error: 'Dates invalides'
-      });
-    }
-
-    if (end < start) {
-      const reservations = await Reservation.find().sort({ startDate: 1 });
-      const catways = await Catway.find().sort({ catwayNumber: 1 });
-      return res.render('reservations', {
-        reservations,
-        catways,
-        user: req.user,
-        error: 'La date de fin doit être postérieure à la date de début'
-      });
-    }
-
+    // Vérifie si le catway existe
     const catway = await Catway.findOne({ catwayNumber });
-    if (!catway) {
-      const reservations = await Reservation.find().sort({ startDate: 1 });
-      const catways = await Catway.find().sort({ catwayNumber: 1 });
-      return res.render('reservations', {
-        reservations,
-        catways,
-        user: req.user,
-        error: `Le catway ${catwayNumber} n'existe pas`
-      });
-    }
+    if (!catway) throw new Error(`Le catway ${catwayNumber} n'existe pas.`);
 
-    // Vérifier qu’aucune autre réservation ne chevauche la période
+    // Vérifie les chevauchements
     const overlapping = await Reservation.findOne({
-      _id: { $ne: req.params.id }, // exclure la résa actuelle
+      _id: { $ne: req.params.id },
       catwayNumber: catway.catwayNumber,
       startDate: { $lte: end },
       endDate: { $gte: start }
     });
 
-    if (overlapping) {
-      const reservations = await Reservation.find().sort({ startDate: 1 });
-      const catways = await Catway.find().sort({ catwayNumber: 1 });
-      return res.render('reservations', {
-        reservations,
-        catways,
-        user: req.user,
-        error: `Le catway ${catwayNumber} est déjà réservé pendant cette période`
-      });
-    }
+    if (overlapping) throw new Error(`Le catway ${catwayNumber} est déjà réservé pendant cette période.`);
 
     // Mise à jour
     await Reservation.findByIdAndUpdate(req.params.id, {
-      catwayNumber: catway.catwayNumber,
+      catwayNumber,
       clientName,
       boatName,
       startDate: start,
       endDate: end
     });
 
-    res.redirect('/reservations');
+    return res.redirect('/reservations');
+
   } catch (err) {
-    console.error('POST /reservations/update error:', err);
-    const reservations = await Reservation.find().sort({ startDate: 1 });
+    console.error('Erreur de mise à jour réservation :', err.message);
+
+    // ⚠️ On recharge toutes les données pour re-render la page proprement
+    const allReservations = await Reservation.find().sort({ startDate: 1 });
     const catways = await Catway.find().sort({ catwayNumber: 1 });
-    res.render('reservations', {
-      reservations,
-      catways,
+    const now = new Date();
+
+    const currentReservations = allReservations.filter(r => r.startDate <= now && r.endDate >= now);
+    const futureReservations = allReservations.filter(r => r.startDate > now);
+    const pastReservations = allReservations.filter(r => r.endDate < now);
+
+    return res.render('reservations', {
       user: req.user,
-      error: "Erreur lors de la modification de la réservation"
+      currentReservations,
+      futureReservations,
+      pastReservations,
+      catways,
+      error: err.message
     });
   }
 });
+
 
 router.post('/delete/:id', checkJWT, async (req, res) => {
   try {
