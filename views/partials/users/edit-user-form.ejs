@@ -1,0 +1,18 @@
+<button type="button" class="edit-btn">Modifier</button>
+
+<form action="/users/update/<%= user.email %>" method="POST" class="update-form hidden">
+  <input type="text" name="userName" value="<%= user.username %>" required>
+  <input type="email" name="email" value="<%= user.email %>" required>
+
+  <input 
+    type="password" 
+    name="password"
+    placeholder="Saisissez votre mot de passe"
+    minlength="8"
+    pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[@$!%*?&]).{8,}$"
+    title="Le mot de passe doit contenir au moins 8 caractères, une majuscule, une minuscule, un chiffre et un caractère spécial."
+  >
+
+  <button type="submit">Sauvegarder</button>
+  <button type="button" class="cancel-btn">Annuler</button>
+</form>

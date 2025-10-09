@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Catway = require('../../models/catway');
-const checkJWT = require('../../middlewares/checkJWT');
+const private = require('../../middlewares/checkJWT');
 
-router.get('/', checkJWT, async (req, res) => {
+router.get('/', private, async (req, res) => {
   try {
     const catways = await Catway.find().sort({ catwayNumber: 1 });
     res.render('catways', { catways, user: req.user, error: null });
@@ -13,7 +13,7 @@ router.get('/', checkJWT, async (req, res) => {
   }
 });
 
-router.post('/add', checkJWT, async (req, res) => {
+router.post('/add', private, async (req, res) => {
   let { catwayNumber, catwayType, catwayState } = req.body;
   
   catwayNumber = parseInt(catwayNumber, 10);
@@ -45,7 +45,7 @@ router.post('/add', checkJWT, async (req, res) => {
   }
 });
 
-router.post('/update/:id', checkJWT, async (req, res) => {
+router.post('/update/:id', private, async (req, res) => {
   const { catwayState } = req.body;
 
   try {
@@ -57,7 +57,7 @@ router.post('/update/:id', checkJWT, async (req, res) => {
   }
 });
 
-router.post('/delete/:id', checkJWT, async (req, res) => {
+router.post('/delete/:id', private, async (req, res) => {
   try {
     await Catway.findByIdAndDelete(req.params.id);
     res.redirect('/catways');

@@ -1,9 +1,9 @@
 const express = require('express');
 const router = express.Router();
 const Reservation = require('../../models/reservation');
-const checkJWT = require('../../middlewares/checkJWT');
+const private = require('../../middlewares/checkJWT');
 
-router.get('/', checkJWT, async (req, res) => {
+router.get('/', private, async (req, res) => {
   try {
     const user = req.user;
     console.log('user:', req.user); //test

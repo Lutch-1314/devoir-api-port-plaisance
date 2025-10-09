@@ -2,9 +2,9 @@ const express = require('express');
 const router = express.Router();
 const Reservation = require('../../models/reservation');
 const Catway = require('../../models/catway');
-const checkJWT = require('../../middlewares/checkJWT');
+const private = require('../../middlewares/checkJWT');
 
-router.get('/', checkJWT, async (req, res) => {
+router.get('/', private, async (req, res) => {
   try {
     const reservations = await Reservation.find().sort({ startDate: 1 });
     const catways = await Catway.find().sort({ catwayNumber: 1 });
@@ -38,7 +38,7 @@ router.get('/', checkJWT, async (req, res) => {
 });
 
 
-router.post('/add', checkJWT, async (req, res) => {
+router.post('/add', private, async (req, res) => {
   try {
     let { catwayNumber, clientName, boatName, startDate, endDate } = req.body;
 
@@ -120,7 +120,7 @@ router.post('/add', checkJWT, async (req, res) => {
   }
 });
 
-router.post('/update/:id', checkJWT, async (req, res) => {
+router.post('/update/:id', private, async (req, res) => {
   try {
     let { catwayNumber, clientName, boatName, startDate, endDate } = req.body;
 
@@ -182,7 +182,7 @@ router.post('/update/:id', checkJWT, async (req, res) => {
 });
 
 
-router.post('/delete/:id', checkJWT, async (req, res) => {
+router.post('/delete/:id', private, async (req, res) => {
   try {
     await Reservation.findByIdAndDelete(req.params.id);
     res.redirect('/reservations');

@@ -4,6 +4,7 @@ const router = express.Router();
 const homeRouter = require('./views/home');
 const authRouter = require('./views/auth');
 const dashboardRouter = require('./views/dashboard');
+const usersViewRouter = require('./views/users');
 const catwaysViewRouter = require('./views/catways');
 const reservationsViewRouter = require('./views/reservations');
 
@@ -14,6 +15,7 @@ const reservationsRouter = require('./api/reservations');
 router.use('/', homeRouter);
 router.use('/', authRouter);
 router.use('/dashboard', dashboardRouter);
+router.use('/users', usersViewRouter);
 router.use('/catways', catwaysViewRouter);
 router.use('/reservations', reservationsViewRouter);
 

@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router({ mergeParams: true }); 
 const reservationService = require('../../services/reservations');
-const private = require('../../middlewares/private');
+const private = require('../../middlewares/checkJWT');
 
-router.get('/', private.checkJWT, reservationService.getAllByCatway);
-router.post('/', private.checkJWT, reservationService.add);
+router.get('/', private, reservationService.getAllByCatway);
+router.post('/', private, reservationService.add);
 
-router.get('/:idReservation', private.checkJWT, reservationService.getById);
-router.put('/:idReservation', private.checkJWT, reservationService.update);
-router.delete('/:idReservation', private.checkJWT, reservationService.delete);
+router.get('/:idReservation', private, reservationService.getById);
+router.put('/:idReservation', private, reservationService.update);
+router.delete('/:idReservation', private, reservationService.delete);
 
 module.exports = router;
