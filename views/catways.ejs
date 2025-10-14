@@ -14,6 +14,11 @@
             </nav>
         </header>
         <main>
+            <% if (message) { %>
+                <div class="message <%= messageType %>">
+                    <%= message %>
+                </div>
+            <% } %>
             <section>
                 <table class="editable-table catways">
                     <caption>Liste des catways</caption>
@@ -45,10 +50,7 @@
             </section>
             <section>
                 <button type="button" class="add-btn">Ajouter un nouveau catway</button>
-                <%- include('partials/catways/add-catway-form') %>
-                <% if (error) { %>
-                    <p class="error"><%= error %></p>
-                <% } %>
+                <%- include('partials/catways/add-catway-form') %>   
             </section>
         </main>
         <script type="module" src="/javascripts/edit-catway.js"></script>
