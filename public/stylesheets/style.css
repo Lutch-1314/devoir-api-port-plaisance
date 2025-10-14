@@ -36,21 +36,29 @@ a {
 }
 td > .btn-container {
   display: flex;
-  gap: 10px; /* espace entre les boutons */
-  align-items: center; /* verticalement centrés */
+  gap: 10px;
+  align-items: center;
 }
 
-/* Bordures autour de toutes les cellules du tableau */
 .editable-table, 
 .editable-table th, 
 .editable-table td {
-  border: 1px solid #333; /* couleur et épaisseur de la bordure */
-  border-collapse: collapse; /* pour éviter les doubles bordures */
-  padding: 8px; /* un peu d’espace à l’intérieur des cellules */
+  border: 1px solid #333;
+  border-collapse: collapse;
+  padding: 8px;
 }
 
-/* Optionnel : style du header */
 .editable-table th {
   background-color: #f2f2f2;
   text-align: center;
+}
+
+.editable-table td:nth-child(1),
+.editable-table td:nth-child(2),
+.editable-table td:nth-child(4) {
+  text-align: center;
+}
+
+.editable-table td:nth-child(3) {
+  text-align: left;
 }
