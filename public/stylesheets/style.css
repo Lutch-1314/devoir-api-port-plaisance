@@ -30,3 +30,27 @@ a {
   color: red;
   border: 1px solid #f5c6cb;
 }
+
+.editable-table caption {
+  display: none;
+}
+td > .btn-container {
+  display: flex;
+  gap: 10px; /* espace entre les boutons */
+  align-items: center; /* verticalement centrés */
+}
+
+/* Bordures autour de toutes les cellules du tableau */
+.editable-table, 
+.editable-table th, 
+.editable-table td {
+  border: 1px solid #333; /* couleur et épaisseur de la bordure */
+  border-collapse: collapse; /* pour éviter les doubles bordures */
+  padding: 8px; /* un peu d’espace à l’intérieur des cellules */
+}
+
+/* Optionnel : style du header */
+.editable-table th {
+  background-color: #f2f2f2;
+  text-align: center;
+}

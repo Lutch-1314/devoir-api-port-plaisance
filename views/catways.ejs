@@ -20,6 +20,7 @@
                 </div>
             <% } %>
             <section>
+                <h2>Liste des catways</h2>
                 <table class="editable-table catways">
                     <caption>Liste des catways</caption>
                     <thead>
@@ -40,8 +41,10 @@
                                     <%- include('partials/catways/edit-catway-form', { catway: catway }) %>
                                 </td>
                                 <td>
-                                    <button type="button" class="edit-btn">Modifier</button>
-                                    <%- include('partials/catways/delete-catway-form', { catway: catway }) %>
+                                    <div class="btn-container">
+                                        <button type="button" class="edit-btn">Modifier</button>
+                                        <%- include('partials/catways/delete-catway-form', { catway: catway }) %>
+                                    </div>
                                 </td>
                             </tr>
                         <% }); %>
@@ -49,6 +52,7 @@
                 </table>
             </section>
             <section>
+                <h2>Ajouter un nouveau catway</h2>
                 <button type="button" class="add-btn">Ajouter un nouveau catway</button>
                 <%- include('partials/catways/add-catway-form') %>   
             </section>
