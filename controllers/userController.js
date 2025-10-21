@@ -1,3 +1,4 @@
+const User = require('../models/user');
 const userService = require('../services/userService');
 const jwt = require('jsonwebtoken');
 
@@ -87,11 +88,23 @@ exports.updateUser = async (req, res) => {
   }
 };
 
+
+
 exports.deleteUser = async (req, res) => {
   try {
-    await userService.deleteUser(req.params.email);
-    res.sendStatus(204);
+    const email = req.params.email;
+    if (!email) {
+      return res.redirect('/users?message=Email manquant&messageType=error');
+    }
+
+    const deletedUser = await User.findOneAndDelete({ email: email });
+    if (!deletedUser) {
+      return res.redirect('/users?message=Utilisateur non trouvé&messageType=error');
+    }
+
+    res.redirect('/users?message=Utilisateur supprimé avec succès&messageType=success');
   } catch (err) {
-    res.status(500).json({ message: "Erreur suppression utilisateur", error: err.message });
+    console.error('🔥 Erreur lors de la suppression:', err);
+    res.redirect('/users?message=Erreur lors de la suppression&messageType=error');
   }
 };

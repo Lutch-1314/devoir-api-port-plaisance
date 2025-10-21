@@ -14,13 +14,12 @@
             </nav>
         </header>
         <main>
-            <% if (error) { %> 
-                <div class="error"><%= error %></div> 
-            <% } %>
+            <div class="message <%= messageType || '' %> <%= message ? '' : 'hidden' %>">
+            <%= message || '' %>
+            </div>
             <section>
                 <h2>Réservations en cours</h2>
-
-                <% if (currentReservations.length === 0) { %>
+                <% if (!currentReservations || currentReservations.length === 0) { %>
                     <p>Aucune réservation en cours.</p>
                 <% } else { %>
                     <table class="editable-table reservations">
@@ -35,10 +34,8 @@
                     </table>
                 <% } %>
             </section>
-
             <section>
                 <h2>Réservations à venir</h2>
-
                 <% if (futureReservations.length===0) { %>
                     <p>Aucune réservation à venir.</p>
                     <% } else { %>
@@ -54,10 +51,8 @@
                         </table>
                     <% } %>
             </section>
-
             <section>
                 <h2>Réservations passées</h2>
-
                 <% if (pastReservations.length === 0) { %>
                     <p>Aucune réservation passée.</p>
                 <% } else { %>
@@ -73,9 +68,14 @@
                     </table>
                 <% } %>
             </section>
+            <section>
+                <h2>Ajouter une nouvelle réservation</h2>
+                <button type="button" class="add-btn">Ajouter une nouvelle réservation</button>
+                <%- include('partials/reservations/add-reservation-form') %>   
+            </section>
         </main>
-        <script type="module" src="/javascripts/add-reservation.js"></script>
         <script type="module" src="/javascripts/edit-reservation.js"></script>
         <script type="module" src="/javascripts/delete-btn.js"></script>
+        <script type="module" src="/javascripts/add-reservation.js"></script>
     </body>
 </html>

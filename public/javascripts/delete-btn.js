@@ -28,39 +28,38 @@ function setupDeleteButtons(tableSelector, confirmMessage, successText) {
     btn.replaceWith(newBtn);
 
     newBtn.addEventListener('click', async (e) => {
-      e.preventDefault();
-      const row = newBtn.closest('tr');
-      const message = confirmMessage(row, newBtn);
+  e.preventDefault();
+  const row = newBtn.closest('tr');
+  const message = confirmMessage(row, newBtn);
+  if (!confirm(message)) return;
 
-      if (!confirm(message)) return;
+  const form = row.querySelector('.delete-form');
+  if (!form) return;
 
-      const form = row.querySelector('.delete-form');
-      if (!form) return;
+  const action = form.getAttribute('action');
+  const method = form.getAttribute('method') || 'POST';
+  const formData = new FormData(form);
 
-      const action = form.getAttribute('action');
-      const method = form.getAttribute('method') || 'POST';
-      const formData = new FormData(form);
-
-      try {
-        const response = await fetch(action, {
-          method: method.toUpperCase(),
-          body: formData,
-        });
-
-        if (response.ok) {
-          row.remove(); // supprime la ligne du tableau
-          showMessage(successText, 'success');
-        } else {
-          const errorText = await response.text();
-          showMessage(`Erreur : ${errorText}`, 'error');
-        }
-      } catch (err) {
-        showMessage(`Erreur : ${err.message}`, 'error');
-      }
+  try {
+    const response = await fetch(action, {
+      method: method.toUpperCase(),
+      body: formData,
     });
-  });
-}
 
+    if (response.ok) {
+      row.remove(); // supprime la ligne du tableau
+      showMessage('Utilisateur supprimé avec succès', 'success');
+    } else {
+      const errorText = await response.text();
+      showMessage(`Erreur : ${errorText}`, 'error');
+    }
+  } catch (err) {
+    showMessage(`Erreur : ${err.message}`, 'error');
+  }
+});
+
+  }
+  )}
 // Initialisation quand le DOM est chargé
 document.addEventListener('DOMContentLoaded', () => {
 

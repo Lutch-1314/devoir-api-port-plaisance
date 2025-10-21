@@ -19,6 +19,9 @@ a {
   display: block;
 }
 
+.message.hidden { display: none; }
+
+
 .message.success {
   background-color: #d4edda;
   color: green;
@@ -59,6 +62,7 @@ td > .btn-container {
   text-align: center;
 }
 
-.editable-table td:nth-child(3) {
-  text-align: left;
+.editable-table.reservations td:nth-child(3) {
+  text-align: center;
 }
+

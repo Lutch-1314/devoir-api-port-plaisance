@@ -13,34 +13,27 @@
       <a href="/dashboard">💻 Retour au tableau de bord</a>
     </nav>
   </header>
-
   <main>
-    <% if (error) { %>
-      <p class="error"><%= error %></p>
-    <% } %>
-
+    <div class="message <%= messageType || '' %> <%= message ? '' : 'hidden' %>">
+    <%= message || '' %>
+    </div>
     <section>
       <h2>Liste des utilisateurs</h2>
-
-      <% if (Users && Users.length > 0) { %>
+      <% if (users && users.length > 0) { %>
         <table class="editable-table users">
           <thead>
             <tr>
               <th>Nom d'utilisateur</th>
               <th>Email</th>
-              
               <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-            <% Users.forEach(user => { %>
+            <% users.forEach(user => { %>
               <tr>
                 <td><%= user.username %></td>
                 <td><%= user.email %></td>
-    
-                <% if (editable) { %>
-                  <td><%- include('partials/users/edit-user-form', { user: user }) %></td>
-                <% } %>
+                <td><%- include('partials/users/edit-user-form', { user: user }) %></td>
                 <td><%- include('partials/users/delete-user-form', { user: user }) %></td>
               </tr>
             <% }); %>
@@ -50,16 +43,12 @@
         <p>Aucun utilisateur trouvé.</p>
       <% } %>
     </section>
-
     <section>
       <h2>Ajouter un nouvel utilisateur</h2>
       <button type="button" class="add-btn">Ajouter un nouvel utilisateur</button>
       <%- include('partials/users/add-user-form') %>
-      <div class="message" style="margin-bottom: 10px; color: green;"></div>
-
     </section>
   </main>
-
   <script type="module" src="/javascripts/edit-user.js"></script>
   <script type="module" src="/javascripts/delete-btn.js"></script>
   <script type="module" src="/javascripts/add-user.js"></script>

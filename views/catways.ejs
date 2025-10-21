@@ -14,11 +14,9 @@
             </nav>
         </header>
         <main>
-            <% if (message) { %>
-                <div class="message <%= messageType %>">
-                    <%= message %>
-                </div>
-            <% } %>
+            <div class="message <%= messageType || '' %> <%= message ? '' : 'hidden' %>">
+            <%= message || '' %>
+            </div>
             <section>
                 <h2>Liste des catways</h2>
                 <table class="editable-table catways">
