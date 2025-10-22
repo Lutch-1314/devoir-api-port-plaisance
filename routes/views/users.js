@@ -6,6 +6,8 @@ const userController = require('../../controllers/userController')
 
 router.get('/', private, userViewController.showUsersPage);
 
+router.post('/update/:email', private, userController.updateUser);
+
 // Route spécifique pour suppression via formulaire (POST)
 router.post('/delete/:email', private, userController.deleteUser);
 

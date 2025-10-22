@@ -33,8 +33,12 @@
               <tr>
                 <td><%= user.username %></td>
                 <td><%= user.email %></td>
-                <td><%- include('partials/users/edit-user-form', { user: user }) %></td>
-                <td><%- include('partials/users/delete-user-form', { user: user }) %></td>
+                <td>
+                  <div class="btn-container">
+                    <%- include('partials/users/edit-user-form', { user: user }) %>
+                    <%- include('partials/users/delete-user-form', { user: user }) %>
+                  </div>
+                </td>
               </tr>
             <% }); %>
           </tbody>

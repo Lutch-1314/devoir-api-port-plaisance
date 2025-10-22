@@ -1,6 +1,7 @@
 const User = require('../models/user');
 const userService = require('../services/userService');
 const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
 exports.login = async (req, res, next) => {
     const { email, password } = req.body;
@@ -80,14 +81,25 @@ exports.addUser = async (req, res) => {
 
 exports.updateUser = async (req, res) => {
   try {
-    const user = await userService.updateUser(req.params.email, req.body);
-    if (!user) return res.status(404).json({ message: "Utilisateur introuvable" });
-    res.json(user);
+    const updates = { ...req.body };
+
+    // Si le mot de passe est vide, on ne le met pas à jour
+    if (!updates.password || updates.password.trim() === '') {
+      delete updates.password;
+    }
+
+    const user = await userService.updateUser(req.params.email, updates);
+
+    if (!user) {
+      return res.redirect('/users?message=Utilisateur introuvable&messageType=error');
+    }
+
+    res.redirect('/users?message=Utilisateur mis à jour avec succès&messageType=success');
   } catch (err) {
-    res.status(500).json({ message: "Erreur modification utilisateur", error: err.message });
+    console.error("🔥 Erreur modification utilisateur:", err);
+    res.redirect('/users?message=Erreur modification utilisateur&messageType=error');
   }
 };
-
 
 
 exports.deleteUser = async (req, res) => {
