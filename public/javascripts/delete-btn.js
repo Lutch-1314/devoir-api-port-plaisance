@@ -48,7 +48,7 @@ function setupDeleteButtons(tableSelector, confirmMessage, successText) {
 
     if (response.ok) {
       row.remove(); // supprime la ligne du tableau
-      showMessage('Utilisateur supprimé avec succès', 'success');
+      showMessage(successText, 'success'); // <-- utilisation dynamique ici
     } else {
       const errorText = await response.text();
       showMessage(`Erreur : ${errorText}`, 'error');
