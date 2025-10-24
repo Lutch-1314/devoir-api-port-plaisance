@@ -1,63 +1,88 @@
+function showMessage(message, type = 'success') {
+  const msgDiv = document.querySelector('.message');
+  if (!msgDiv) return;
+  msgDiv.innerText = message;
+  msgDiv.classList.remove('success', 'error');
+  msgDiv.classList.add(type);
+  msgDiv.classList.remove('hidden');
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  const form = document.getElementById('addUserForm');
   const addBtn = document.querySelector('.add-btn');
-  const addForm = document.querySelector('.add-form');
-  const cancelBtn = addForm.querySelector('.cancel-btn');
+  const cancelBtn = form.querySelector('.cancel-btn');
 
-  if (!addBtn || !addForm) return;
-
-  // --- Afficher le formulaire ---
-  addBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    addForm.classList.remove('hidden');
+  // Afficher le formulaire
+  addBtn?.addEventListener('click', () => {
+    form.classList.remove('hidden');
     addBtn.classList.add('hidden');
   });
 
-  // --- Annuler ---
-  cancelBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    addForm.classList.add('hidden');
+  // Annuler
+  cancelBtn?.addEventListener('click', () => {
+    form.classList.add('hidden');
     addBtn.classList.remove('hidden');
+    form.reset();
   });
 
-  // --- Cacher le formulaire si on clique ailleurs ---
-  document.addEventListener('click', (e) => {
-    if (!addForm.contains(e.target) && e.target !== addBtn) {
-      if (!addForm.classList.contains('hidden')) {
-        addForm.classList.add('hidden');
-        addBtn.classList.remove('hidden');
-      }
-    }
-  });
+  // Validation mot de passe
+  function validatePassword(password, confirmPassword) {
+    const regex = /^(?=.*[A-Z])(?=.*\d)(?=.*[\W_]).{8,}$/;
+    if (!regex.test(password)) return 'Le mot de passe doit contenir au moins 8 caractères, 1 majuscule, 1 chiffre et 1 caractère spécial.';
+    if (password !== confirmPassword) return 'Les mots de passe ne correspondent pas.';
+    return null;
+  }
 
-  // --- Soumission AJAX du formulaire ---
-  addForm.addEventListener('submit', async (e) => {
+  // Soumission AJAX
+  form?.addEventListener('submit', async e => {
     e.preventDefault();
 
-    const formData = new FormData(addForm);
-    const data = Object.fromEntries(formData.entries());
+    const username = form.querySelector('[name="username"]').value;
+    const email = form.querySelector('[name="email"]').value;
+    const password = form.querySelector('[name="password"]').value;
+    const confirmPassword = form.querySelector('[name="confirmPassword"]').value;
+
+    // Validation côté client
+    const validationError = validatePassword(password, confirmPassword);
+    if (validationError) {
+      showMessage(validationError, 'error');
+      return;
+    }
 
     try {
       const response = await fetch('/api/users', {
         method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(data)
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ username, email, password })
       });
 
-      const result = await response.json();
+      if (response.ok) {
+        const data = await response.json();
+        showMessage('Utilisateur ajouté avec succès !', 'success');
 
-      if (!response.ok) {
-        alert(result.message || 'Erreur lors de l’ajout');
-        return;
+        // Ajouter directement l'utilisateur dans le tableau
+        const tbody = document.querySelector('.editable-table.users tbody');
+        const newRow = document.createElement('tr');
+        newRow.dataset.email = data.user.email;
+        newRow.innerHTML = `
+          <td>${data.user.username}</td>
+          <td>${data.user.email}</td>
+          <td>
+            <button type="button" class="edit-btn">Modifier</button>
+            <button type="button" class="delete-btn" data-type="user">Supprimer</button>
+          </td>
+        `;
+        tbody.appendChild(newRow);
+
+        form.reset();
+        form.classList.add('hidden');
+        addBtn.classList.remove('hidden');
+      } else {
+        const err = await response.json();
+        showMessage(err.message || 'Erreur lors de l’ajout', 'error');
       }
-
-      // Redirige pour rafraîchir la page avec message de succès
-      window.location.href = '/users?message=Utilisateur ajouté avec succès&messageType=success';
-
     } catch (err) {
-      console.error('🔥 Erreur AJAX:', err);
-      alert('Erreur lors de l’ajout de l’utilisateur.');
+      showMessage(err.message, 'error');
     }
   });
 });

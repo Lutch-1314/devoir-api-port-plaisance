@@ -1,50 +1,45 @@
+// javascripts/delete-btn.js
 function showMessage(message, type = 'success') {
   const msgDiv = document.querySelector('.message');
   if (!msgDiv) return;
   msgDiv.innerText = message;
   msgDiv.classList.remove('success', 'error');
   msgDiv.classList.add(type);
-  msgDiv.style.display = 'block';
+  msgDiv.classList.remove('hidden');
 }
 
-export function setupDeleteButtons() {
-  document.querySelectorAll('.delete-btn').forEach(btn => {
-    btn.addEventListener('click', async e => {
-      e.preventDefault();
+export function setupDeleteButtons(selector = '.delete-btn') {
+  document.querySelectorAll(selector).forEach(btn => {
+    btn.addEventListener('click', async () => {
       const row = btn.closest('tr');
+      const type = btn.dataset.type; // 'user', 'catway', 'reservation'
+      if (!type) return;
 
-      // Vérifie si c'est une réservation ou un catway
-      const isReservation = row.classList.contains('reservation-row');
-      const isCatway = row.classList.contains('catway-row');
+      let url;
+      let confirmMsg;
 
-      let confirmMsg = '';
-      let url = '';
-      let method = 'DELETE';
-
-      if (isReservation) {
+      if (type === 'user') {
+        const email = row.dataset.email;
+        url = `/api/users/${email}`;
+        confirmMsg = `Supprimer l'utilisateur ${email} ?`;
+      } else if (type === 'catway') {
+        const catwayNumber = row.dataset.id;
+        url = `/api/catways/${catwayNumber}`;
+        confirmMsg = `Supprimer le catway ${catwayNumber} ?`;
+      } else if (type === 'reservation') {
         const reservationId = row.dataset.id;
         const catwayNumber = row.querySelector('td.catway').innerText;
-        const clientName = row.querySelector('td.clientName').innerText;
-        const boatName = row.querySelector('td.boatName').innerText;
-
-        confirmMsg = `Supprimer la réservation de ${clientName} (${boatName}) ?`;
         url = `/api/catways/${catwayNumber}/reservations/${reservationId}`;
-
-      } else if (isCatway) {
-        const catwayNumber = row.dataset.id;
-        confirmMsg = `Confirmer la suppression du catway ${catwayNumber} ?`;
-        url = `/api/catways/${catwayNumber}`;
-      } else {
-        return; // ni réservation ni catway
+        confirmMsg = `Supprimer cette réservation ?`;
       }
 
       if (!confirm(confirmMsg)) return;
 
       try {
-        const response = await fetch(url, { method });
-        if (response.ok) {
+        const response = await fetch(url, { method: 'DELETE' });
+        if (response.ok || response.status === 204) {
           row.remove();
-          showMessage(isReservation ? 'Réservation supprimée !' : `Catway ${row.dataset.id} supprimé !`, 'success');
+          showMessage('Suppression réussie', 'success');
         } else {
           const err = await response.json();
           showMessage(err.message || 'Erreur', 'error');
@@ -57,6 +52,4 @@ export function setupDeleteButtons() {
 }
 
 // Initialisation
-document.addEventListener('DOMContentLoaded', () => {
-  setupDeleteButtons();
-});
+document.addEventListener('DOMContentLoaded', () => setupDeleteButtons());

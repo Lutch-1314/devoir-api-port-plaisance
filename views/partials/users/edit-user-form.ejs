@@ -1,8 +1,4 @@
-<!-- Bouton "Modifier" visible -->
-<button type="button" class="edit-btn">Modifier</button>
-
-<!-- Formulaire caché pour la modification -->
-<form action="/users/update/<%= user.email %>" method="POST" class="update-form hidden">
+<form class="update-form hidden" data-email="<%= user.email %>">
   <input type="text" name="username" value="<%= user.username %>" required>
   <input type="email" name="email" value="<%= user.email %>" required>
   <input type="password" name="password" placeholder="Nouveau mot de passe (optionnel)">
