@@ -31,20 +31,21 @@
                     </thead>
                     <tbody>
                         <% catways.forEach(catway => { %>
-                            <tr>
-                                <td><%= catway.catwayNumber %></td>
-                                <td><%= catway.catwayType === 'short' ? 'Court' : 'Long' %></td>
-                                <td class="state-cell">
-                                    <span class="state-text"><%= catway.catwayState %></span>
-                                    <%- include('partials/catways/edit-catway-form', { catway: catway }) %>
-                                </td>
-                                <td>
-                                    <div class="btn-container">
-                                        <button type="button" class="edit-btn">Modifier</button>
-                                        <%- include('partials/catways/delete-catway-form', { catway: catway }) %>
-                                    </div>
-                                </td>
-                            </tr>
+                            <tr class="catway-row" data-id="<%= catway.catwayNumber %>">
+  <td class="catway"><%= catway.catwayNumber %></td>
+  <td><%= catway.catwayType === 'short' ? 'Court' : 'Long' %></td>
+  <td class="state-cell">
+    <span class="state-text"><%= catway.catwayState %></span>
+    <%- include('partials/catways/edit-catway-form', { catway: catway }) %>
+  </td>
+  <td>
+    <div class="btn-container">
+      <button type="button" class="edit-btn">Modifier</button>
+      <button type="button" class="delete-btn">Supprimer</button>
+    </div>
+  </td>
+</tr>
+
                         <% }); %>
                     </tbody>
                 </table>

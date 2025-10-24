@@ -1,66 +1,60 @@
-export function makeTablesEditable(tableSelector = '.editable-table') {
-  document.querySelectorAll(tableSelector).forEach(table => {
-    table.querySelectorAll('tr').forEach(row => {
-      const editBtn = row.querySelector('.edit-btn');
-      const stateText = row.querySelector('.state-text');
-      const form = row.querySelector('.state-form');
-      const cancelBtn = row.querySelector('.cancel-btn');
-
-      if (!editBtn || !form || !stateText || !cancelBtn) return;
-
-      editBtn.addEventListener('click', (e) => {
-        e.stopPropagation(); 
-        stateText.classList.add('hidden');
-        form.classList.remove('hidden');
-        editBtn.classList.add('hidden');
-      });
-
-      cancelBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        form.classList.add('hidden');
-        stateText.classList.remove('hidden');
-        editBtn.classList.remove('hidden');
-      });
-    });
-  });
-
-  document.addEventListener('click', (e) => {
-    document.querySelectorAll('.editable-table tr').forEach(row => {
-      const stateCell = row.querySelector('.state-cell');
-      const stateText = row.querySelector('.state-text');
-      const form = row.querySelector('.state-form');
-      const editBtn = row.querySelector('.edit-btn');
-
-      if (!form || !stateCell) return;
-
-      // Si le clic est à l’intérieur de la cellule -> on ne fait rien
-      if (stateCell.contains(e.target)) return;
-
-      if (!form.classList.contains('hidden')) {
-        form.classList.add('hidden');
-        stateText.classList.remove('hidden');
-        editBtn.classList.remove('hidden');
-      }
-    });
-  });
+function showMessage(message, type = 'success') {
+  const msgDiv = document.querySelector('.message');
+  if (!msgDiv) return;
+  msgDiv.innerText = message;
+  msgDiv.classList.remove('success', 'error');
+  msgDiv.classList.add(type);
+  msgDiv.classList.remove('hidden');
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  document.querySelectorAll('.delete-form').forEach(form => {
-    const deleteBtn = form.querySelector('.delete-btn');
-    deleteBtn.addEventListener('click', (e) => {
-      e.preventDefault(); // empêche la soumission immédiate
-      const row = form.closest('tr');
-      const catwayNumber = row.querySelector('td').textContent.trim();
+  document.querySelectorAll('.editable-table.catways tr').forEach(row => {
+    const editBtn = row.querySelector('.edit-btn');
+    const form = row.querySelector('.update-form');
+    const cancelBtn = form?.querySelector('.cancel-btn');
+    const stateText = row.querySelector('.state-text');
 
-      const confirmDelete = confirm(`Êtes-vous sûr de vouloir supprimer le catway ${catwayNumber} ?`);
-      if (confirmDelete) {
-        form.submit(); // soumission seulement si confirmé
+    if (!editBtn || !form) return;
+
+    editBtn.addEventListener('click', () => {
+      form.classList.remove('hidden');
+      stateText.classList.add('hidden');
+      editBtn.classList.add('hidden');
+    });
+
+    cancelBtn?.addEventListener('click', () => {
+      form.classList.add('hidden');
+      stateText.classList.remove('hidden');
+      editBtn.classList.remove('hidden');
+    });
+
+    form.addEventListener('submit', async e => {
+      e.preventDefault();
+      const id = form.dataset.id;
+      const catwayState = form.querySelector('[name="catwayState"]').value;
+
+      try {
+        const response = await fetch(`/api/catways/${id}`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ catwayState })
+        });
+
+        if (response.ok) {
+          const updated = await response.json();
+          stateText.textContent = updated.catwayState;
+
+          form.classList.add('hidden');
+          stateText.classList.remove('hidden');
+          editBtn.classList.remove('hidden');
+          showMessage('Catway mis à jour !', 'success');
+        } else {
+          const err = await response.json();
+          showMessage(err.message || 'Erreur lors de la mise à jour', 'error');
+        }
+      } catch (err) {
+        showMessage(err.message, 'error');
       }
     });
   });
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  makeTablesEditable();
 });

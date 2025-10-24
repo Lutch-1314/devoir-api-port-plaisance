@@ -22,16 +22,15 @@ exports.addCatway = async ({ catwayNumber, catwayType, catwayState }) => {
   return await catway.save();
 };
 
-exports.updateCatway = async (id, catwayState) => {
-  const catway = await Catway.findById(id);
+exports.updateCatway = async (catwayNumber, catwayState) => {
+  const catway = await Catway.findOne({ catwayNumber });
   if (!catway) throw new Error("Catway introuvable");
-  
   catway.catwayState = catwayState;
   return catway.save();
 };
 
-exports.deleteCatway = async (id) => {
-  const deleted = await Catway.findByIdAndDelete(id);
+exports.deleteCatway = async (catwayNumber) => {
+  const deleted = await Catway.findOneAndDelete({ catwayNumber });
   if (!deleted) throw new Error("Catway introuvable");
   return deleted;
 };
