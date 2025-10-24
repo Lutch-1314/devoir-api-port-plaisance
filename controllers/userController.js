@@ -82,25 +82,53 @@ exports.addUser = async (req, res) => {
 exports.updateUser = async (req, res) => {
   try {
     const updates = { ...req.body };
+    const targetEmail = req.params.email; // email du user qu'on modifie
+    const loggedUser = req.user;           // user connecté
 
-    // Si le mot de passe est vide, on ne le met pas à jour
-    if (!updates.password || updates.password.trim() === '') {
-      delete updates.password;
-    }
-
-    const user = await userService.updateUser(req.params.email, updates);
-
+    // Vérifie si l’utilisateur à modifier existe
+    const user = await userService.findByEmail(targetEmail);
     if (!user) {
       return res.redirect('/users?message=Utilisateur introuvable&messageType=error');
     }
 
-    res.redirect('/users?message=Utilisateur mis à jour avec succès&messageType=success');
+    // --- Gestion du mot de passe ---
+    if (updates.password && updates.password.trim() !== '') {
+      // Si l’utilisateur modifie son propre mot de passe → vérifier le mot de passe actuel
+      if (loggedUser.email === targetEmail) {
+        if (!updates.currentPassword || updates.currentPassword.trim() === '') {
+          return res.redirect('/users?message=Mot de passe actuel requis&messageType=error');
+        }
+
+        const isMatch = await bcrypt.compare(updates.currentPassword, user.password);
+        if (!isMatch) {
+          return res.redirect('/users?message=Mot de passe actuel incorrect&messageType=error');
+        }
+      }
+
+      // Dans tous les cas : on hash le nouveau mot de passe
+      updates.password = await bcrypt.hash(updates.password, 10);
+    } else {
+      delete updates.password;
+    }
+
+    // --- Met à jour l'utilisateur ---
+    const updatedUser = await userService.updateUser(targetEmail, updates);
+    if (!updatedUser) {
+      return res.redirect('/users?message=Erreur lors de la mise à jour&messageType=error');
+    }
+
+    // --- Message si email changé ---
+    let message = 'Utilisateur mis à jour avec succès';
+    if (updates.email && updates.email !== targetEmail) {
+      message += '. Ton nouvel email sera désormais utilisé pour te connecter.';
+    }
+
+    res.redirect(`/users?message=${encodeURIComponent(message)}&messageType=success`);
   } catch (err) {
     console.error("🔥 Erreur modification utilisateur:", err);
     res.redirect('/users?message=Erreur modification utilisateur&messageType=error');
   }
 };
-
 
 exports.deleteUser = async (req, res) => {
   try {

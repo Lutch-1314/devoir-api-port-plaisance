@@ -15,7 +15,7 @@
         </header>
         <main>
             <div class="message <%= messageType || '' %> <%= message ? '' : 'hidden' %>">
-            <%= message || '' %>
+                <%= message || '' %>
             </div>
             <section>
                 <h2>Réservations en cours</h2>
@@ -70,7 +70,7 @@
             </section>
             <section>
                 <h2>Ajouter une nouvelle réservation</h2>
-                <button type="button" class="add-btn">Ajouter une nouvelle réservation</button>
+                <button type="button" class="show-add-form-btn">Ajouter une réservation</button>
                 <%- include('partials/reservations/add-reservation-form') %>   
             </section>
         </main>

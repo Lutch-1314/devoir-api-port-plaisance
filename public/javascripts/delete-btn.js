@@ -1,84 +1,40 @@
 // delete-btn.js
-
-/**
- * Affiche un message dans le div .message
- * @param {string} message - Texte à afficher
- * @param {string} type - 'success' ou 'error'
- */
 function showMessage(message, type = 'success') {
   const msgDiv = document.querySelector('.message');
   if (!msgDiv) return;
-
   msgDiv.innerText = message;
   msgDiv.classList.remove('success', 'error');
   msgDiv.classList.add(type);
   msgDiv.style.display = 'block';
 }
 
-/**
- * Initialise les boutons de suppression pour un tableau donné avec Ajax
- * @param {string} tableSelector - sélecteur du tableau
- * @param {function} confirmMessage - fonction qui retourne le message de confirmation (row, btn) => string
- * @param {string} successText - message à afficher après suppression
- */
-function setupDeleteButtons(tableSelector, confirmMessage, successText) {
-  const buttons = document.querySelectorAll(`${tableSelector} .delete-btn`);
-  buttons.forEach(btn => {
-    const newBtn = btn.cloneNode(true);
-    btn.replaceWith(newBtn);
+export function setupDeleteButtons(tableSelector = '.editable-table.reservations') {
+  document.querySelectorAll(`${tableSelector} .delete-btn`).forEach(btn => {
+    btn.addEventListener('click', async e => {
+      e.preventDefault();
+      const row = btn.closest('tr');
+      const reservationId = row.dataset.id;
+      const catwayNumber = row.querySelector('td.catway').innerText;
 
-    newBtn.addEventListener('click', async (e) => {
-  e.preventDefault();
-  const row = newBtn.closest('tr');
-  const message = confirmMessage(row, newBtn);
-  if (!confirm(message)) return;
+      if (!confirm(`Supprimer la réservation de ${row.querySelector('td.clientName').innerText} (${row.querySelector('td.boatName').innerText}) ?`)) return;
 
-  const form = row.querySelector('.delete-form');
-  if (!form) return;
-
-  const action = form.getAttribute('action');
-  const method = form.getAttribute('method') || 'POST';
-  const formData = new FormData(form);
-
-  try {
-    const response = await fetch(action, {
-      method: method.toUpperCase(),
-      body: formData,
+      try {
+        const response = await fetch(`/api/catways/${catwayNumber}/reservations/${reservationId}`, { method: 'DELETE' });
+        if (response.ok) {
+          row.remove();
+          showMessage('Réservation supprimée !', 'success');
+        } else {
+          const err = await response.json();
+          showMessage(err.message || 'Erreur', 'error');
+        }
+      } catch (err) {
+        showMessage(err.message, 'error');
+      }
     });
+  });
+}
 
-    if (response.ok) {
-      row.remove(); // supprime la ligne du tableau
-      showMessage(successText, 'success'); // <-- utilisation dynamique ici
-    } else {
-      const errorText = await response.text();
-      showMessage(`Erreur : ${errorText}`, 'error');
-    }
-  } catch (err) {
-    showMessage(`Erreur : ${err.message}`, 'error');
-  }
-});
-
-  }
-  )}
-// Initialisation quand le DOM est chargé
+// Initialisation
 document.addEventListener('DOMContentLoaded', () => {
-
-  // Catways
-  setupDeleteButtons('.editable-table.catways', (row) => {
-    const catwayNumber = row.querySelector('td')?.innerText || '';
-    return `Êtes-vous sûr de vouloir supprimer le catway ${catwayNumber} ?`;
-  }, 'Catway supprimé avec succès');
-
-  // Réservations
-  setupDeleteButtons('.editable-table.reservations', (row) => {
-    const clientName = row.querySelector('td:nth-child(2)')?.innerText || '';
-    const boatName = row.querySelector('td:nth-child(3)')?.innerText || '';
-    return `Supprimer la réservation de ${clientName} (${boatName}) ?`;
-  }, 'Réservation supprimée avec succès');
-
-  // Utilisateurs
-  setupDeleteButtons('.editable-table.users', (row) => {
-    const userName = row.querySelector('td')?.innerText || '';
-    return `Êtes-vous sûr de vouloir supprimer l'utilisateur ${userName} ?`;
-  }, 'Utilisateur supprimé avec succès');
+  setupDeleteButtons();
 });

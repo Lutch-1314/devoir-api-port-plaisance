@@ -1,14 +1,12 @@
-<tr>
-    <td><%= reservation.catwayNumber %></td>
-    <td><%= reservation.clientName %></td>
-    <td><%= reservation.boatName %></td>
-    <td><%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %></td>
-    <td><%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %></td>
-    <td>
-      <div class="btn-container">
-          <button type="button" class="edit-btn">Modifier</button>
-          <%- include('edit-reservation-form', { reservation: reservation }) %>
-          <%- include('delete-reservation-form', { reservation: reservation }) %>
-      </div>
-    </td> 
+<tr data-id="<%= reservation._id %>">
+  <td class="catway display-only"><%= reservation.catwayNumber %></td>
+  <td class="clientName display-only"><%= reservation.clientName %></td>
+  <td class="boatName display-only"><%= reservation.boatName %></td>
+  <td class="startDate display-only"><%= new Date(reservation.startDate).toLocaleDateString('fr-FR') %></td>
+  <td class="endDate display-only"><%= new Date(reservation.endDate).toLocaleDateString('fr-FR') %></td>
+  <td>
+    <button type="button" class="edit-btn">Modifier</button>
+    <%- include('edit-reservation-form') %>
+    <button type="button" class="delete-btn">Supprimer</button>
+  </td>
 </tr>

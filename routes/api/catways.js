@@ -1,13 +1,13 @@
 const express = require('express');
 const router = express.Router();
-const service = require('../../services/catways');
 const private = require('../../middlewares/checkJWT');
+const catwayController = require('../../controllers/catwayController');
 
-router.get('/', private, service.getAllCatways);
-router.post('/', private, service.add);
+router.get('/', private, catwayController.getAllCatways);
+router.post('/', private, catwayController.addCatway);
 
-router.get('/:id', private, service.getById);
-router.put('/:id', private, service.update);
-router.delete('/:id', private, service.delete);
+router.get('/:id', private, catwayController.getCatwayById);
+router.put('/:id', private, catwayController.updateCatway);
+router.delete('/:id', private, catwayController.deleteCatway);
 
 module.exports = router;

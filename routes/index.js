@@ -21,6 +21,7 @@ router.use('/reservations', reservationsViewRouter);
 
 router.use('/api/users', usersRouter);
 router.use('/api/catways', catwaysRouter);
+router.use('/api/reservations', reservationsRouter);
 router.use('/api/catways/:id/reservations', reservationsRouter);
 
 module.exports = router;
