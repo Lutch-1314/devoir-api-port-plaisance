@@ -6,8 +6,10 @@ const logger = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
+
 const indexRouter = require('./routes/index');
 
+const { swaggerUi, swaggerSpec } = require('./swagger');
 const app = express();
 
 mongoose.connect(process.env.MONGO_URI)
@@ -26,7 +28,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 app.use('/', indexRouter);
 
 // catch 404 and forward to error handler
@@ -42,5 +44,7 @@ app.use((err, req, res, next) => {
     error: req.app.get('env') === 'development' ? err : {}
   });
 });
+
+
 
 module.exports = app;
