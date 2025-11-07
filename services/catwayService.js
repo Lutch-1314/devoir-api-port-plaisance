@@ -5,7 +5,10 @@ exports.getAllCatways = async () => {
 };
 
 
-exports.getCatwayById = async (id) => Catway.findById(id);
+// Nouvelle fonction pour récupérer un catway par son numéro
+exports.getCatwayByNumber = async (catwayNumber) => {
+  return await Catway.findOne({ catwayNumber });
+};
 
 // ⚠️ Ajouter un catway
 // Ton code est bon, mais pour l’AJAX on veut renvoyer une erreur claire (objet Error)

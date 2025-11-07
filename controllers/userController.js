@@ -15,7 +15,12 @@ exports.login = async (req, res) => {
     const token = jwt.sign(payload, process.env.SECRET_KEY, { expiresIn: '24h' });
 
     res.cookie('token', token, { httpOnly: true, maxAge: 24*60*60*1000 });
-    res.status(200).json({ message: "Connexion réussie", user: payload });
+    res.status(200).json({
+      message: "Connexion réussie",
+      token,
+      user: payload
+    });
+
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: "Erreur serveur", error: err.message });

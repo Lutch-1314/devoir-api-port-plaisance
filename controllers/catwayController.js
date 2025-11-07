@@ -11,9 +11,11 @@ exports.getAllCatways = async (req, res) => {
   }
 };
 
+// GET /catways/:id → id représente le catwayNumber
 exports.getCatwayById = async (req, res) => {
   try {
-    const catway = await catwayService.getCatwayById(req.params.idCatway);
+    const catwayNumber = parseInt(req.params.id, 10);
+    const catway = await catwayService.getCatwayByNumber(catwayNumber);
     if (!catway) return res.status(404).json({ message: "Catway introuvable" });
     res.status(200).json(catway);
   } catch (error) {
@@ -35,10 +37,19 @@ exports.addCatway = async (req, res) => {
 
 exports.updateCatway = async (req, res) => {
   try {
-    const { catwayState } = req.body;
     const catwayNumber = parseInt(req.params.id, 10);
-    const updated = await catwayService.updateCatway(catwayNumber, catwayState);
-    res.status(200).json(updated);
+    const { catwayState } = req.body;
+
+    if (!catwayState) {
+      return res.status(400).json({ message: "Le champ 'catwayState' est requis pour la mise à jour" });
+    }
+
+    const updatedCatway = await catwayService.updateCatway(catwayNumber, catwayState);
+    if (!updatedCatway) {
+      return res.status(404).json({ message: "Catway non trouvé" });
+    }
+
+    res.status(200).json(updatedCatway);
   } catch (error) {
     console.error(error);
     res.status(400).json({ message: error.message || "Erreur lors de la mise à jour" });
@@ -48,10 +59,11 @@ exports.updateCatway = async (req, res) => {
 exports.deleteCatway = async (req, res) => {
   const catwayNumber = parseInt(req.params.id, 10);
   try {
-    await catwayService.deleteCatway(catwayNumber); // le service supprime le catway par numéro
-    res.status(204).send();
+    const deleted = await catwayService.deleteCatway(catwayNumber);
+    if (!deleted) return res.status(404).json({ message: "Catway non trouvé" });
+
+    res.status(200).json({ message: `Catway ${catwayNumber} supprimé avec succès` });
   } catch (error) {
     res.status(400).json({ message: error.message || "Erreur lors de la suppression" });
   }
 };
-

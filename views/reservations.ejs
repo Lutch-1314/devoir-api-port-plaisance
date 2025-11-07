@@ -22,7 +22,7 @@
                 <% if (!currentReservations || currentReservations.length === 0) { %>
                     <p>Aucune réservation en cours.</p>
                 <% } else { %>
-                    <table class="editable-table reservations">
+                    <table id="currentReservations" class="editable-table reservations">
                         <thead>
                             <%- include('partials/reservations/reservation-table-header') %>
                         </thead>
@@ -39,7 +39,7 @@
                 <% if (futureReservations.length===0) { %>
                     <p>Aucune réservation à venir.</p>
                     <% } else { %>
-                        <table class="editable-table reservations">
+                        <table id="futureReservations" class="editable-table reservations">
                             <thead>
                                 <%- include('partials/reservations/reservation-table-header') %>
                             </thead>
@@ -56,7 +56,7 @@
                 <% if (pastReservations.length === 0) { %>
                     <p>Aucune réservation passée.</p>
                 <% } else { %>
-                    <table class="editable-table reservations">
+                    <table id="pastReservations" class="editable-table reservations">
                         <thead>
                             <%- include('partials/reservations/reservation-table-header') %>                      
                         </thead>

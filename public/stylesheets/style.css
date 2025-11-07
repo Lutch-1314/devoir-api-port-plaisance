@@ -21,7 +21,6 @@ a {
 
 .message.hidden { display: none; }
 
-
 .message.success {
   background-color: #d4edda;
   color: green;
@@ -65,4 +64,3 @@ td > .btn-container {
 .editable-table.reservations td:nth-child(3) {
   text-align: center;
 }
-

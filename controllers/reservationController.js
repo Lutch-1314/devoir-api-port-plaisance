@@ -1,10 +1,17 @@
-// controllers/reservationController.js
 const reservationService = require('../services/reservationService');
 const Catway = require('../models/catway');
 
+// 🔹 Récupérer toutes les réservations d’un catway
 exports.getAllReservations = async (req, res) => {
   try {
-    const reservations = await reservationService.getAll();
+    const catwayNumber = parseInt(req.params.id);
+    const catway = await Catway.findOne({ catwayNumber });
+
+    if (!catway) {
+      return res.status(404).json({ message: `Catway ${catwayNumber} introuvable` });
+    }
+
+    const reservations = await reservationService.getByCatway(catwayNumber);
     res.status(200).json(reservations);
   } catch (error) {
     console.error(error);
@@ -12,12 +19,16 @@ exports.getAllReservations = async (req, res) => {
   }
 };
 
+// 🔹 Récupérer une réservation spécifique d’un catway
 exports.getReservationById = async (req, res) => {
   try {
-    const reservation = await reservationService.getById(req.params.idReservation);
-    if (!reservation) {
-      return res.status(404).json({ message: "Réservation introuvable" });
+    const { id: catwayNumber, idReservation } = req.params;
+
+    const reservation = await reservationService.getById(idReservation);
+    if (!reservation || reservation.catwayNumber !== parseInt(catwayNumber)) {
+      return res.status(404).json({ message: "Réservation introuvable pour ce catway" });
     }
+
     res.status(200).json(reservation);
   } catch (error) {
     console.error(error);
@@ -25,42 +36,28 @@ exports.getReservationById = async (req, res) => {
   }
 };
 
+// 🔹 Créer une nouvelle réservation pour un catway
 exports.addReservation = async (req, res) => {
   try {
-    const { catwayNumber, clientName, boatName, startDate, endDate } = req.body;
+    const catwayNumber = parseInt(req.params.id);
+    const { clientName, boatName, startDate, endDate } = req.body;
     const start = new Date(startDate);
     const end = new Date(endDate);
 
-    // 🔍 Validation des dates
     if (isNaN(start) || isNaN(end) || start >= end) {
-      const message = "Dates invalides";
-      if (req.headers.accept && req.headers.accept.includes("text/html")) {
-        return res.redirect(`/reservations?message=${encodeURIComponent(message)}&messageType=error`);
-      }
-      return res.status(400).json({ message });
+      return res.status(400).json({ message: "Dates invalides" });
     }
 
-    // 🔍 Vérifie que le catway existe
     const catway = await Catway.findOne({ catwayNumber });
     if (!catway) {
-      const message = `Catway ${catwayNumber} inexistant`;
-      if (req.headers.accept && req.headers.accept.includes("text/html")) {
-        return res.redirect(`/reservations?message=${encodeURIComponent(message)}&messageType=error`);
-      }
-      return res.status(404).json({ message });
+      return res.status(404).json({ message: `Catway ${catwayNumber} inexistant` });
     }
 
-    // 🔍 Vérifie s’il y a un conflit de réservation
     const conflict = await reservationService.findConflicts(catwayNumber, start, end);
     if (conflict) {
-      const message = "Conflit : ce catway est déjà réservé sur cette période";
-      if (req.headers.accept && req.headers.accept.includes("text/html")) {
-        return res.redirect(`/reservations?message=${encodeURIComponent(message)}&messageType=error`);
-      }
-      return res.status(409).json({ message });
+      return res.status(409).json({ message: "Conflit : ce catway est déjà réservé sur cette période" });
     }
 
-    // ✅ Ajoute la réservation
     const reservation = await reservationService.add({
       catwayNumber,
       clientName,
@@ -69,28 +66,18 @@ exports.addReservation = async (req, res) => {
       endDate: end
     });
 
-    // 🧭 Si c’est une requête HTML (formulaire classique), on redirige
-    if (req.headers.accept && req.headers.accept.includes("text/html")) {
-      return res.redirect("/reservations?message=Réservation créée avec succès&messageType=success");
-    }
-
-    // 🧩 Sinon, on renvoie le JSON (pour API ou AJAX)
     res.status(201).json(reservation);
-
   } catch (error) {
     console.error(error);
-    const message = "Erreur lors de la création de la réservation";
-    if (req.headers.accept && req.headers.accept.includes("text/html")) {
-      return res.redirect(`/reservations?message=${encodeURIComponent(message)}&messageType=error`);
-    }
-    res.status(500).json({ message });
+    res.status(500).json({ message: "Erreur lors de la création de la réservation" });
   }
 };
 
+// 🔹 Mettre à jour une réservation d’un catway
 exports.updateReservation = async (req, res) => {
   try {
-    const reservationId = req.params.idReservation;
-    const { catwayNumber, clientName, boatName, startDate, endDate } = req.body;
+    const { id: catwayNumber, idReservation } = req.params;
+    const { clientName, boatName, startDate, endDate } = req.body;
 
     const start = new Date(startDate);
     const end = new Date(endDate);
@@ -99,18 +86,17 @@ exports.updateReservation = async (req, res) => {
       return res.status(400).json({ message: "Dates invalides" });
     }
 
-    const reservation = await reservationService.getById(reservationId);
-    if (!reservation) {
-      return res.status(404).json({ message: "Réservation introuvable" });
+    const reservation = await reservationService.getById(idReservation);
+    if (!reservation || reservation.catwayNumber !== parseInt(catwayNumber)) {
+      return res.status(404).json({ message: "Réservation introuvable pour ce catway" });
     }
 
-    const conflict = await reservationService.findConflicts(catwayNumber, start, end, reservationId);
+    const conflict = await reservationService.findConflicts(catwayNumber, start, end, idReservation);
     if (conflict) {
       return res.status(409).json({ message: "Conflit : ce catway est déjà réservé sur cette période" });
     }
 
-    const updated = await reservationService.update(reservationId, {
-      catwayNumber,
+    const updated = await reservationService.update(idReservation, {
       clientName,
       boatName,
       startDate: start,
@@ -124,11 +110,17 @@ exports.updateReservation = async (req, res) => {
   }
 };
 
-
-
+// 🔹 Supprimer une réservation
 exports.deleteReservation = async (req, res) => {
   try {
-    await reservationService.delete(req.params.idReservation);
+    const { id: catwayNumber, idReservation } = req.params;
+
+    const reservation = await reservationService.getById(idReservation);
+    if (!reservation || reservation.catwayNumber !== parseInt(catwayNumber)) {
+      return res.status(404).json({ message: "Réservation introuvable pour ce catway" });
+    }
+
+    await reservationService.delete(idReservation);
     res.status(204).send();
   } catch (error) {
     console.error(error);

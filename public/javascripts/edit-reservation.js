@@ -1,4 +1,5 @@
-// edit-reservation.js
+// edit-reservation.js — uniquement Modifier / Annuler / PUT + repositionnement
+
 function showMessage(message, type = 'success') {
   const msgDiv = document.querySelector('.message');
   if (!msgDiv) return;
@@ -8,87 +9,135 @@ function showMessage(message, type = 'success') {
   msgDiv.style.display = 'block';
 }
 
+// Trouve le tbody correct pour une réservation donnée
+function getTargetTbodyForReservation(reservation) {
+  const today = new Date();
+  today.setHours(0,0,0,0);
+
+  const start = new Date(reservation.startDate);
+  start.setHours(0,0,0,0);
+
+  const end = new Date(reservation.endDate);
+  end.setHours(0,0,0,0);
+
+  if (end < today) return document.querySelector('#pastReservations tbody');
+  if (start > today) return document.querySelector('#futureReservations tbody');
+  return document.querySelector('#currentReservations tbody');
+}
+
+// Insère la row triée par startDate
+function insertSortedRow(tbody, row, editRow, reservation) {
+  const newStart = new Date(reservation.startDate);
+  const rows = Array.from(tbody.querySelectorAll('tr.reservation-row'));
+  let inserted = false;
+
+  for (const existingRow of rows) {
+    const dateCell = existingRow.querySelector('.startDate');
+    if (!dateCell) continue;
+    const parts = dateCell.textContent.trim().split('/');
+    if (parts.length !== 3) continue;
+    const rowDate = new Date(`${parts[2]}-${parts[1]}-${parts[0]}`);
+    rowDate.setHours(0,0,0,0);
+
+    if (newStart < rowDate) {
+      tbody.insertBefore(row, existingRow);
+      tbody.insertBefore(editRow, row.nextSibling);
+      inserted = true;
+      break;
+    }
+  }
+
+  if (!inserted) {
+    tbody.appendChild(row);
+    tbody.appendChild(editRow);
+  }
+}
+
 export function setupEditableReservations(tableSelector = '.editable-table.reservations') {
-  document.querySelectorAll(`${tableSelector} tr`).forEach(row => {
+  const rows = document.querySelectorAll(`${tableSelector} tr.reservation-row`);
+
+  rows.forEach(row => {
     const editBtn = row.querySelector('.edit-btn');
-    const form = row.querySelector('.update-form');
-    const cancelBtn = row.querySelector('.cancel-btn');
-    const displayCells = row.querySelectorAll('.display-only');
+    const deleteBtn = row.querySelector('.delete-btn');
 
-    if (!editBtn || !form) return;
+    if (!editBtn) return;
 
-   // Afficher formulaire
-editBtn.addEventListener('click', e => {
-  e.stopPropagation();
-  form.classList.remove('hidden');
-  editBtn.classList.add('hidden');
-  displayCells.forEach(cell => cell.classList.add('hidden'));
+    const editRow = row.nextElementSibling;
+    if (!editRow || !editRow.classList.contains('edit-row')) return;
 
-  // 🗓️ Pré-remplit les inputs de date
-  const startCell = row.querySelector('td.startDate')?.innerText.trim();
-  const endCell = row.querySelector('td.endDate')?.innerText.trim();
+    const form = editRow.querySelector('.update-form');
+    const cancelBtn = form?.querySelector('.cancel-btn');
 
-  // Vérifie si le format est JJ/MM/AAAA avant de convertir
-  if (startCell && startCell.includes('/')) {
-    const [startDay, startMonth, startYear] = startCell.split('/');
-    form.querySelector('[name="startDate"]').value = `${startYear}-${startMonth.padStart(2, '0')}-${startDay.padStart(2, '0')}`;
-  }
-
-  if (endCell && endCell.includes('/')) {
-    const [endDay, endMonth, endYear] = endCell.split('/');
-    form.querySelector('[name="endDate"]').value = `${endYear}-${endMonth.padStart(2, '0')}-${endDay.padStart(2, '0')}`;
-  }
-});
-
-
-    // Annuler modification
-    cancelBtn.addEventListener('click', e => {
+    // CLIQUE SUR MODIFIER
+    editBtn.addEventListener('click', e => {
       e.stopPropagation();
-      form.classList.add('hidden');
-      editBtn.classList.remove('hidden');
-      displayCells.forEach(cell => cell.classList.remove('hidden'));
+      row.style.display = 'none';
+      editRow.classList.remove('hidden');
+      if (deleteBtn) deleteBtn.classList.add('hidden');
     });
 
-    // Soumettre formulaire en AJAX
-    form.addEventListener('submit', async e => {
-      e.preventDefault();
-      const reservationId = form.dataset.id;
-      const catwayNumber = form.querySelector('[name="catwayNumber"]').value;
-      const clientName = form.querySelector('[name="clientName"]').value;
-      const boatName = form.querySelector('[name="boatName"]').value;
-      const startDate = form.querySelector('[name="startDate"]').value;
-      const endDate = form.querySelector('[name="endDate"]').value;
+    // CLIQUE SUR ANNULER
+    if (cancelBtn) {
+      cancelBtn.addEventListener('click', e => {
+        e.stopPropagation();
+        editRow.classList.add('hidden');
+        row.style.display = '';
+        if (deleteBtn) deleteBtn.classList.remove('hidden');
+      });
+    }
 
-      try {
-        const response = await fetch(`/api/catways/${catwayNumber}/reservations/${reservationId}`, {
-          method: 'PUT',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ catwayNumber, clientName, boatName, startDate, endDate })
-        });
+    // ENVOI DU FORMULAIRE (PUT)
+    if (form) {
+      form.addEventListener('submit', async e => {
+        e.preventDefault();
 
-        if (response.ok) {
-          const updated = await response.json();
+        const reservationId = row.dataset.id;
+        const catwayNumberCell = row.querySelector('td.catway');
+        const catwayNumber = catwayNumberCell ? catwayNumberCell.innerText.trim() : form.querySelector('[name="catwayNumber"]')?.value;
+        const clientName = form.querySelector('[name="clientName"]').value;
+        const boatName = form.querySelector('[name="boatName"]').value;
+        const startDate = form.querySelector('[name="startDate"]').value;
+        const endDate = form.querySelector('[name="endDate"]').value;
 
-          // 🔹 Mettre à jour les cellules visibles avec le format JJ/MM/AAAA
-  row.querySelector('td.catway').innerText = updated.catwayNumber;
-  row.querySelector('td.clientName').innerText = updated.clientName;
-  row.querySelector('td.boatName').innerText = updated.boatName;
-  row.querySelector('td.startDate').innerText = new Date(updated.startDate).toLocaleDateString('fr-FR');
-  row.querySelector('td.endDate').innerText = new Date(updated.endDate).toLocaleDateString('fr-FR');
+        try {
+          const response = await fetch(`/api/catways/${catwayNumber}/reservations/${reservationId}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ catwayNumber, clientName, boatName, startDate, endDate })
+          });
 
-          form.classList.add('hidden');
-          editBtn.classList.remove('hidden');
-          displayCells.forEach(cell => cell.classList.remove('hidden'));
+          if (response.ok) {
+            const updated = await response.json();
 
-          showMessage('Réservation mise à jour !', 'success');
-        } else {
-          const err = await response.json();
-          showMessage(err.message || 'Erreur', 'error');
+            // Mettre à jour l'affichage
+            row.querySelector('td.clientName').innerText = updated.clientName;
+            row.querySelector('td.boatName').innerText = updated.boatName;
+            row.querySelector('td.startDate').innerText = new Date(updated.startDate).toLocaleDateString('fr-FR');
+            row.querySelector('td.endDate').innerText = new Date(updated.endDate).toLocaleDateString('fr-FR');
+
+            // ===== repositionner si besoin =====
+            const targetTbody = getTargetTbodyForReservation(updated);
+            if (targetTbody && targetTbody !== row.parentElement) {
+              row.parentElement.removeChild(row);
+              editRow.parentElement.removeChild(editRow);
+            }
+            insertSortedRow(targetTbody, row, editRow, updated);
+
+            // Replier le formulaire
+            editRow.classList.add('hidden');
+            row.style.display = '';
+            if (deleteBtn) deleteBtn.classList.remove('hidden');
+
+            showMessage('Réservation mise à jour !', 'success');
+          } else {
+            const err = await response.json();
+            showMessage(err.message || 'Erreur lors de la mise à jour', 'error');
+          }
+        } catch (err) {
+          showMessage(err.message || 'Erreur de connexion', 'error');
         }
-      } catch (err) {
-        showMessage(err.message, 'error');
-      }
-    });
+      });
+    }
   });
 }
 

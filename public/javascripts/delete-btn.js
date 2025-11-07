@@ -29,8 +29,11 @@ export function setupDeleteButtons(selector = '.delete-btn') {
       } else if (type === 'reservation') {
         const reservationId = row.dataset.id;
         const catwayNumber = row.querySelector('td.catway').innerText;
+        const clientName = row.querySelector('td.clientName').innerText;
+        const startDate = row.querySelector('td.startDate').innerText;
+        const endDate = row.querySelector('td.endDate').innerText;
         url = `/api/catways/${catwayNumber}/reservations/${reservationId}`;
-        confirmMsg = `Supprimer cette réservation ?`;
+        confirmMsg = `Supprimer la réservation de ${clientName} du ${startDate} au ${endDate} ?`;
       }
 
       if (!confirm(confirmMsg)) return;
