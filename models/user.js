@@ -17,10 +17,13 @@ const User = new Schema ({
         lowercase: true
     },
     password: {
-        type : String,
-        trim : true,
-        minlength: 8,
-        match: [/\d/, 'Le mot de passe doit contenir au moins un chiffre']
+        type: String,
+        trim: true,
+        required: [true, 'Le mot de passe est requis'],
+        match: [
+          /^(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*(),.?":{}|<>]).{8,}$/,
+          'Le mot de passe doit contenir au moins 8 caractères, une majuscule, un chiffre et un caractère spécial.'
+        ]
     }
 }, {
     timestamps: true

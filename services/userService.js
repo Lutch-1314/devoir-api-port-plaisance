@@ -12,22 +12,21 @@ exports.getUserByEmail = async (email) => {
   return User.findOne({ email });
 };
 
-// Ajoute un nouvel utilisateur avec mot de passe hashé
+// Ajoute un nouvel utilisateur avec mot de passe hashé automatiquement (via pre-save)
 exports.addUser = async (data) => {
   if (!data.password) throw new Error("Le mot de passe est requis");
-  const hashedPassword = await bcrypt.hash(data.password, 10);
-  return User.create({ ...data, password: hashedPassword });
+  return User.create(data); // ✅ Mongoose fera le hashage tout seul
 };
+
 
 // Met à jour un utilisateur par email
 exports.updateUser = async (email, data) => {
   const user = await User.findOne({ email });
   if (!user) throw new Error("Utilisateur introuvable");
 
-  // Hash du mot de passe si modifié
   if (data.password) {
-    data.password = await bcrypt.hash(data.password, 10);
-  }
+  user.password = data.password; // ne pas re-hasher ici
+}
 
   // Mise à jour uniquement des champs reçus
   Object.keys(data).forEach(key => {

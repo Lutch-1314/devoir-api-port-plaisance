@@ -60,7 +60,14 @@ exports.getUserByEmail = async (req, res) => {
 exports.addUser = async (req, res) => {
   try {
     const user = await userService.addUser(req.body);
-    res.status(201).json({ message: "Utilisateur créé avec succès", user });
+
+    // Supprimer le mot de passe de la réponse
+    const { password, ...userWithoutPassword } = user.toObject();
+
+    res.status(201).json({
+      message: "Utilisateur créé avec succès",
+      user: userWithoutPassword
+    });
   } catch (err) {
     console.error(err);
     res.status(400).json({ message: err.message || "Erreur lors de l'ajout" });
@@ -77,14 +84,19 @@ exports.updateUser = async (req, res) => {
       return res.status(404).json({ message: "Utilisateur introuvable" });
     }
 
+    // Supprimer le mot de passe de l'objet avant de renvoyer
+    const { password, ...userWithoutPassword } = updatedUser.toObject();
+    
     // Ne plus faire de redirection, renvoyer JSON
     res.status(200).json({
       username: updatedUser.username,
-      email: updatedUser.email
+      email: updatedUser.email,
+      message: "Utilisateur mis à jour avec succès",
+      user: userWithoutPassword
     });
   } catch (err) {
     console.error("🔥 Erreur modification utilisateur:", err);
-    res.status(400).json({ message: "Erreur modification utilisateur" });
+    res.status(400).json({ message: err.message || "Erreur modification utilisateur" });
   }
 };
 
