@@ -6,11 +6,11 @@ const logger = require('morgan');
 const cors = require('cors');
 const mongoose = require('mongoose');
 
-
 const indexRouter = require('./routes/index');
 
 const { swaggerUi, swaggerSpec } = require('./swagger');
 const app = express();
+require('dotenv').config();
 
 mongoose.connect(process.env.MONGO_URI)
   .then(() => console.log(`✅ Connecté à MongoDB : ${process.env.MONGO_URI}`))
@@ -18,6 +18,10 @@ mongoose.connect(process.env.MONGO_URI)
 
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
+
+app.get('/healthz', (req, res) => {
+  res.status(200).send('OK');
+});
 
 app.use(cors({
     exposedHeaders: ['Authorization'],
@@ -44,7 +48,5 @@ app.use((err, req, res, next) => {
     error: req.app.get('env') === 'development' ? err : {}
   });
 });
-
-
 
 module.exports = app;

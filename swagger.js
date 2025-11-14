@@ -25,12 +25,12 @@ security: [
   },
 ],
 
-    servers: [
-      {
-        url: 'http://localhost:3000',
-        description: 'Serveur local',
-      },
-    ],
+servers: [
+  {
+    url: process.env.SWAGGER_SERVER || 'http://localhost:3000',
+    description: 'Serveur local ou distant',
+  },
+],
   },
   apis: ['./routes/api/*.js'], // On cible toutes tes routes d’API
 };

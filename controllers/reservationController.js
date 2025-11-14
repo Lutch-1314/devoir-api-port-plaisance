@@ -1,7 +1,6 @@
 const reservationService = require('../services/reservationService');
 const Catway = require('../models/catway');
 
-// 🔹 Récupérer toutes les réservations d’un catway
 exports.getAllReservations = async (req, res) => {
   try {
     const catwayNumber = parseInt(req.params.id);
@@ -19,7 +18,6 @@ exports.getAllReservations = async (req, res) => {
   }
 };
 
-// 🔹 Récupérer une réservation spécifique d’un catway
 exports.getReservationById = async (req, res) => {
   try {
     const { id: catwayNumber, idReservation } = req.params;
@@ -36,7 +34,6 @@ exports.getReservationById = async (req, res) => {
   }
 };
 
-// 🔹 Créer une nouvelle réservation pour un catway
 exports.addReservation = async (req, res) => {
   try {
     const catwayNumber = parseInt(req.params.id);
@@ -73,7 +70,6 @@ exports.addReservation = async (req, res) => {
   }
 };
 
-// 🔹 Mettre à jour une réservation d’un catway
 exports.updateReservation = async (req, res) => {
   try {
     const { id: catwayNumber, idReservation } = req.params;
@@ -110,7 +106,6 @@ exports.updateReservation = async (req, res) => {
   }
 };
 
-// 🔹 Supprimer une réservation
 exports.deleteReservation = async (req, res) => {
   try {
     const { id: catwayNumber, idReservation } = req.params;
