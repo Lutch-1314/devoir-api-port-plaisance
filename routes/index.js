@@ -15,10 +15,12 @@ router.use('/users', usersViewRouter);
 router.use('/catways', catwaysViewRouter);
 router.use('/reservations', reservationsViewRouter);
 
+const authApiRouter = require('./api/auth');
 const usersRouter = require('./api/users');
 const catwaysRouter = require('./api/catways');
 const reservationsRouter = require('./api/reservations');
 
+router.use('/api/auth', authApiRouter);
 router.use('/api/users', usersRouter);
 router.use('/api/catways', catwaysRouter);
 router.use('/api/catways/:id/reservations', reservationsRouter);
