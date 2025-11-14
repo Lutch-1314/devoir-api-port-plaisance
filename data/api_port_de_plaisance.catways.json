@@ -1,0 +1,465 @@
+[{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013c9"
+  },
+  "catwayNumber": 1,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.710Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-22T08:55:05.333Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013ca"
+  },
+  "catwayNumber": 2,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.711Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.711Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013cb"
+  },
+  "catwayNumber": 3,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.711Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.711Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013cc"
+  },
+  "catwayNumber": 4,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.711Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.711Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013cd"
+  },
+  "catwayNumber": 5,
+  "catwayType": "long",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.711Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-02T07:52:47.034Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013ce"
+  },
+  "catwayNumber": 6,
+  "catwayType": "short",
+  "catwayState": "En rénovation, indisponible",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.711Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-19T08:54:25.152Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013cf"
+  },
+  "catwayNumber": 7,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013d0"
+  },
+  "catwayNumber": 8,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013d1"
+  },
+  "catwayNumber": 9,
+  "catwayType": "long",
+  "catwayState": "Plusieurs grandes tâches de peinture bleue sur le ponton",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013d2"
+  },
+  "catwayNumber": 10,
+  "catwayType": "long",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013d3"
+  },
+  "catwayNumber": 11,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013d4"
+  },
+  "catwayNumber": 12,
+  "catwayType": "short",
+  "catwayState": "grosse tâche d'huile et trou en fin de ponton",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013d5"
+  },
+  "catwayNumber": 13,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013d6"
+  },
+  "catwayNumber": 14,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013d7"
+  },
+  "catwayNumber": 15,
+  "catwayType": "long",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013d8"
+  },
+  "catwayNumber": 16,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013d9"
+  },
+  "catwayNumber": 17,
+  "catwayType": "short",
+  "catwayState": "2 planches bougent lorsqu'on marche dessus",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013da"
+  },
+  "catwayNumber": 18,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-02T07:52:44.126Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013dc"
+  },
+  "catwayNumber": 20,
+  "catwayType": "long",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013dd"
+  },
+  "catwayNumber": 21,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013de"
+  },
+  "catwayNumber": 22,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cc2fec21f79118c1e013df"
+  },
+  "catwayNumber": 23,
+  "catwayType": "short",
+  "catwayState": "La bite d'amarrage est légèrement désolidarisée",
+  "__v": 0,
+  "createdAt": {
+    "$date": "2025-09-18T16:14:36.712Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-02T07:52:51.841Z"
+  }
+},
+{
+  "_id": {
+    "$oid": "68cd1e6a5915e463da1093bb"
+  },
+  "catwayNumber": 19,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "createdAt": {
+    "$date": "2025-09-19T09:12:10.169Z"
+  },
+  "updatedAt": {
+    "$date": "2025-09-19T09:12:10.169Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68ee0235fb545c3a826235b2"
+  },
+  "catwayNumber": 24,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "createdAt": {
+    "$date": "2025-10-14T07:56:37.283Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-14T09:07:24.353Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68f89d1cfd33da954bf6b6e3"
+  },
+  "catwayNumber": 25,
+  "catwayType": "long",
+  "catwayState": "état neuf",
+  "createdAt": {
+    "$date": "2025-10-22T09:00:12.186Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-22T09:00:12.186Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68f8ee2f0c5004a0267918f3"
+  },
+  "catwayNumber": 26,
+  "catwayType": "short",
+  "catwayState": "aaa",
+  "createdAt": {
+    "$date": "2025-10-22T14:46:07.114Z"
+  },
+  "updatedAt": {
+    "$date": "2025-10-22T14:46:07.114Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "68fb8046f6c86936b62c3cfc"
+  },
+  "catwayNumber": 27,
+  "catwayType": "short",
+  "catwayState": "bon état",
+  "createdAt": {
+    "$date": "2025-10-24T13:33:58.163Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-04T14:09:28.207Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6909cb2c8c93ecae88ea5f82"
+  },
+  "catwayNumber": 28,
+  "catwayType": "long",
+  "catwayState": "bon état",
+  "createdAt": {
+    "$date": "2025-11-04T09:45:16.304Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-04T09:45:16.304Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "6909f8ae1fcbad1d7b06be62"
+  },
+  "catwayNumber": 29,
+  "catwayType": "short",
+  "catwayState": "En cours de réparation",
+  "createdAt": {
+    "$date": "2025-11-04T12:59:26.548Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-04T14:02:27.682Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "690a0959ae02f6e91f856976"
+  },
+  "catwayNumber": 30,
+  "catwayType": "long",
+  "catwayState": "Etat neuf",
+  "createdAt": {
+    "$date": "2025-11-04T14:10:33.259Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-07T13:34:02.762Z"
+  },
+  "__v": 0
+},
+{
+  "_id": {
+    "$oid": "690e0c624707dee1dd114f2a"
+  },
+  "catwayNumber": 31,
+  "catwayType": "short",
+  "catwayState": "sdfgq",
+  "createdAt": {
+    "$date": "2025-11-07T15:12:34.022Z"
+  },
+  "updatedAt": {
+    "$date": "2025-11-07T15:12:34.022Z"
+  },
+  "__v": 0
+}]
