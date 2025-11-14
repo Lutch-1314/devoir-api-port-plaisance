@@ -3,6 +3,10 @@ const router = express.Router();
 const private = require('../../middlewares/checkJWT');
 const catwayController = require('../../controllers/catwayController');
 
+router.get('/test', async (req, res) => {
+  res.json({ message: "Route catways OK" });
+});
+
 /**
  * @swagger
  * tags:
