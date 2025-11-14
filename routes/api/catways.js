@@ -1,7 +1,9 @@
 const express = require('express');
 const router = express.Router();
-const private = require('../../middlewares/checkJWT');
+const authApi = require('../../middlewares/authAPI');
 const catwayController = require('../../controllers/catwayController');
+
+router.use(authApi);
 
 router.get('/test', async (req, res) => {
   res.json({ message: "Route catways OK" });
