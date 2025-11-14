@@ -27,8 +27,8 @@ security: [
 
 servers: [
   {
-    url: process.env.SWAGGER_SERVER || 'http://localhost:3000',
-    description: 'Serveur local ou distant',
+    url: 'https://devoir-api-port-plaisance.onrender.com',
+    description: 'Serveur de production Render',
   },
 ],
   },
