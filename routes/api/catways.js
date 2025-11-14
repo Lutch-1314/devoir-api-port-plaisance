@@ -104,8 +104,8 @@ router.get('/test', async (req, res) => {
  *             schema:
  *               $ref: '#/components/schemas/Catway'
  */
-router.get('/', private, catwayController.getAllCatways);
-router.post('/', private, catwayController.addCatway);
+router.get('/', authApi, catwayController.getAllCatways);
+router.post('/', authApi, catwayController.addCatway);
 
 /**
  * @swagger
@@ -211,8 +211,8 @@ router.post('/', private, catwayController.addCatway);
  *                   type: string
  *                   example: "Catway non trouvé"
  */
-router.get('/:id', private, catwayController.getCatwayById);
-router.put('/:id', private, catwayController.updateCatway);
-router.delete('/:id', private, catwayController.deleteCatway);
+router.get('/:id', authApi, catwayController.getCatwayById);
+router.put('/:id', authApi, catwayController.updateCatway);
+router.delete('/:id', authApi, catwayController.deleteCatway);
 
 module.exports = router;
