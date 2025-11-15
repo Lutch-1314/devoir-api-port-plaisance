@@ -1,0 +1,33 @@
+# --- Node.js ---
+node_modules/
+
+# --- Environment variables ---
+.env
+.env.dev
+.env.prod
+
+# --- Logs ---
+logs/
+*.log
+
+# --- Build / Cache ---
+dist/
+build/
+.cache/
+tmp/
+temp/
+
+# --- OS / Editor ---
+.DS_Store
+Thumbs.db
+
+# --- VSCode ---
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# --- Misc ---
+*.bak
+*.swp
